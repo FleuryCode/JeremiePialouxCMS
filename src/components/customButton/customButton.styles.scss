@@ -1,0 +1,22 @@
+.customButtonContainer {
+    width: 100%;
+    height: 44px;
+    background-color: rgb(255, 214, 137);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-transform: uppercase;
+    color: rgb(73, 73, 73);
+    border-radius: 12px;
+    box-shadow: 0 5px 5px rgba(0, 0, 0, 0.4);
+    cursor: pointer;
+    transition: 0.5s;
+
+    h5 {
+        margin: 0;
+    }
+    &:hover {
+        background-color: rgb(204, 109, 0);
+        color: white;
+    }
+}
