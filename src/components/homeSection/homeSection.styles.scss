@@ -1,0 +1,9 @@
+.homeSectionContainer {
+    width: 100%;
+    .portfolioContainer {
+        display: flex;
+        flex-wrap: wrap;
+        width: 80%;
+        height: 100%;
+    }
+}

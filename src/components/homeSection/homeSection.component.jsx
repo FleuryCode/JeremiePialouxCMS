@@ -1,12 +1,32 @@
 import React from "react";
 import './homeSection.styles.scss';
 
-const HomeSection = () => {
-    return(
+// Redux
+import { connect } from "react-redux";
+import PortfolioImage from "../portfolioImage/portfolioImage.component";
+
+const HomeSection = ({ images }) => {
+    const testImage = images[0];
+    return (
         <div className="homeSectionContainer">
-            <h1>Home Section</h1>
+            <div className="portfolioContainer">
+                <PortfolioImage image={testImage} />
+                <PortfolioImage image={testImage} />
+                <PortfolioImage image={testImage} />
+                <PortfolioImage image={testImage} />
+                <PortfolioImage image={testImage} />
+                <PortfolioImage image={testImage} />
+                <PortfolioImage image={testImage} />
+                <PortfolioImage image={testImage} />
+                <PortfolioImage image={testImage} />
+                <PortfolioImage image={testImage} />
+            </div>
         </div>
     );
 }
 
-export default HomeSection;
+const mapStateToProps = (state) => ({
+    images: state.portfolio.portfolioImages
+});
+
+export default connect(mapStateToProps)(HomeSection);
