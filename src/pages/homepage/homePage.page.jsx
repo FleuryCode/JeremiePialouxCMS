@@ -2,6 +2,8 @@ import React, { useEffect } from "react";
 import './homePage.styles.scss';
 import { Route, Routes } from "react-router-dom";
 import Navigation from "../../components/navigation/navigation.component";
+import HomeSection from "../../components/homeSection/homeSection.component";
+import EditTextSection from '../../components/editTextSection/editTextSection.component';
 // Redux
 import { connect } from "react-redux";
 import { setPortfolioImages, setImagesDownloading } from "../../redux/portfolio/portfolio.actions";
@@ -47,7 +49,8 @@ const Homepage = ({ portfolioDb, setPortfolioImages, setImagesDownloading, isDow
                         <Navigation />
                         <div className="servicesPagesContainer ms-auto">
                             <Routes>
-
+                                <Route exact path="/" element={<HomeSection />} />
+                                <Route exact path="/modification" element={<EditTextSection />} />
                             </Routes>
                         </div>
                     </div>
