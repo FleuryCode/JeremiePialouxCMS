@@ -1,25 +1,23 @@
 import React from "react";
 import './homeSection.styles.scss';
+import PortfolioImage from "../portfolioImage/portfolioImage.component";
+import AddImageButton from "../addImageButton/addImageButton.component";
 
 // Redux
 import { connect } from "react-redux";
-import PortfolioImage from "../portfolioImage/portfolioImage.component";
 
 const HomeSection = ({ images }) => {
-    const testImage = images[0];
     return (
         <div className="homeSectionContainer">
             <div className="portfolioContainer">
-                <PortfolioImage image={testImage} />
-                <PortfolioImage image={testImage} />
-                <PortfolioImage image={testImage} />
-                <PortfolioImage image={testImage} />
-                <PortfolioImage image={testImage} />
-                <PortfolioImage image={testImage} />
-                <PortfolioImage image={testImage} />
-                <PortfolioImage image={testImage} />
-                <PortfolioImage image={testImage} />
-                <PortfolioImage image={testImage} />
+                {
+                    images.map(image => (
+                        <PortfolioImage key={image} image={image} />
+                    ))
+                }
+            </div>
+            <div className="buttonContainer">
+                <AddImageButton />
             </div>
         </div>
     );

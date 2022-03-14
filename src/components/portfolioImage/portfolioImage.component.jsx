@@ -3,7 +3,7 @@ import './portfolioImage.styles.scss';
 
 const PortfolioImage = ({ image }) => {
     return (
-        <div className="portfolioImageContainer">
+        <div className="portfolioImageContainer" draggable="draggable">
             <img src={image} alt="" />
         </div>
     );

@@ -9,10 +9,10 @@ const Navigation = () => {
     return (
         <div className="navigationContainer">
             <Link className="iconContainer" to={'/'} >
-                <HomeIcon className="icon" fill={`${(location.pathname === '/') ? '#676767' : '#ffffff' }`} />
+                <HomeIcon className="icon" fill={`${(location.pathname === '/') ? '#ffffff' : '#ffc251' }`} />
             </Link>
             <Link className="iconContainer" to={'/modification'} >
-                <EditTextIcon className="icon" fill={`${(location.pathname === '/modification') ? '#676767' : '#ffffff' }`} />
+                <EditTextIcon className="icon" fill={`${(location.pathname === '/modification') ? '#ffffff' : '#ffc251' }`} />
             </Link>
         </div>
     );
