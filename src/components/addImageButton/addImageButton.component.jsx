@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import './addImageButton.styles.scss';
 import PlusIcon from '../../assets/plusSignIcon.svg';
 // Redux
@@ -10,12 +10,14 @@ import { doc, updateDoc } from "firebase/firestore";
 
 const AddImageButton = ({ portfolioData }) => {
     const hiddenFileInput = React.useRef(null);
+    const [imagesUploading, setImagesUploading] = useState(false);
 
     const addButtonClick = () => {
         hiddenFileInput.current.click();
     };
 
     const multiUploadChange = async (event) => {
+        setImagesUploading(true);
         if (event.target.files && event.target.files[0]) {
             const fileArray = event.target.files;
 
@@ -46,13 +48,22 @@ const AddImageButton = ({ portfolioData }) => {
             const portfolioRef = doc(db, 'Portfolio', 'MainPortfolio');
             await updateDoc(portfolioRef, portfolioData);
             console.log('Huzzah!');
+            setImagesUploading(false);
             // Look into adding another redux isUploading/Downloading field to add empty loading boxes. More UX friendly.
         }
     }
     return (
         <div className="addImageButtonContainer">
             <div onClick={addButtonClick} className="addButton">
-                <img src={PlusIcon} alt="Add image button" />
+                {
+                    imagesUploading ?
+                    <div className="spinner-border" role="status">
+                        <span className="visually-hidden">Loading...</span>
+                    </div>
+                    :
+                    <img src={PlusIcon} alt="Add image button" />
+                }
+                
             </div>
             <input
                 onChange={multiUploadChange}
