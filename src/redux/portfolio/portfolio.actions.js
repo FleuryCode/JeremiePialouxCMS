@@ -1,5 +1,10 @@
 import { PortfolioTypes } from "./portfolio.types";
 
+export const setPortfolioData = (data) => ({
+    type: PortfolioTypes.SET_PORTFOLIO_DATA,
+    payload: data
+});
+
 export const setPortfolioDb = (dbArray) => ({
     type: PortfolioTypes.SET_PORTFOLIO_DB,
     payload: dbArray

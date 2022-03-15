@@ -5,17 +5,18 @@ import SignIn from './pages/signin/signIn.page';
 import Homepage from './pages/homepage/homePage.page';
 // Redux
 import { connect } from 'react-redux';
-import { setPortfolioDb } from './redux/portfolio/portfolio.actions';
+import { setPortfolioDb, setPortfolioData } from './redux/portfolio/portfolio.actions';
 // Firebase
 import firebaseApp, { db } from './firebase/firebase.utils';
 import { doc, onSnapshot } from "firebase/firestore";
 
 
 
-function App({ loggedIn, setPortfolioDb }) {
+function App({ loggedIn, setPortfolioDb, setPortfolioData }) {
 
   const dataArray = onSnapshot(doc(db, 'Portfolio', 'MainPortfolio'), (doc) => {
     const data = doc.data().images;
+    setPortfolioData(doc.data());
     // Organizing based on ID.
     data.sort((a, b) => {
       return a.id - b.id;
@@ -46,7 +47,8 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  setPortfolioDb: portfolioData => dispatch(setPortfolioDb(portfolioData))
+  setPortfolioDb: portfolioData => dispatch(setPortfolioDb(portfolioData)),
+  setPortfolioData: data => dispatch(setPortfolioData(data))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

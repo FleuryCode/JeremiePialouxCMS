@@ -1,15 +1,21 @@
 import { PortfolioTypes } from "./portfolio.types";
 
 const INITIAL_STATE = {
+    portfolioData: [],
     portfolioDb: [],
     portfolioImages: [],
     isDownloading: true
 };
 
 const portfolioReducer = (state = INITIAL_STATE, action) => {
-    switch(action.type) {
+    switch (action.type) {
+        case PortfolioTypes.SET_PORTFOLIO_DATA:
+            return {
+                ...state,
+                portfolioData: action.payload
+            };
         case PortfolioTypes.SET_PORTFOLIO_DB:
-            return{
+            return {
                 ...state,
                 portfolioDb: action.payload
             };
