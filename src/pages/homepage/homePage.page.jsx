@@ -29,6 +29,8 @@ const Homepage = ({ portfolioDb, setPortfolioImages, setImagesDownloading, isDow
             };
             setPortfolioImages(imageUrls);
             setImagesDownloading(false);
+        }else {
+            setImagesDownloading(false);
         };
     };
 
