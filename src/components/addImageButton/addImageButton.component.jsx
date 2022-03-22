@@ -34,7 +34,10 @@ const AddImageButton = ({ portfolioData }) => {
                         portfolioData.images.push(
                             {
                                 id: portfolioData.images.length + 1,
-                                imageName: fileArray[i].name
+                                imageName: fileArray[i].name,
+                                title: fileArray[i].name,
+                                description: '',
+                                otherImages: [fileArray[i].name]
                             }
                         );
                     })
