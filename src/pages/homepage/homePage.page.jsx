@@ -12,14 +12,14 @@ import { storage } from "../../firebase/firebase.utils";
 import { getDownloadURL, ref } from "firebase/storage";
 
 
-const Homepage = ({ portfolioDb, setPortfolioImages, setImagesDownloading, isDownloading }) => {
+const Homepage = ({ setPortfolioImages, setImagesDownloading, isDownloading, portfolioData }) => {
 
     // Downloading Images From Storage
     const getImages = async () => {
-        if (portfolioDb.length > 0) {
+        if (portfolioData.length > 0) {
             let imageUrls = [];
-            for (let i = 0; i < portfolioDb.length; i++) {
-                await getDownloadURL(ref(storage, `Portfolio/${portfolioDb[i]}`))
+            for (let i = 0; i < portfolioData.length; i++) {
+                await getDownloadURL(ref(storage, `Portfolio/${portfolioData[i].imageName}`))
                     .then((url) => {
                         imageUrls.push(url);
                     })
@@ -29,16 +29,13 @@ const Homepage = ({ portfolioDb, setPortfolioImages, setImagesDownloading, isDow
             };
             setPortfolioImages(imageUrls);
             setImagesDownloading(false);
-        }else {
-            setImagesDownloading(false);
-        };
+        }
     };
 
     useEffect(() => {
         getImages();
-    }, [portfolioDb]);
+    }, [portfolioData]);
 
-    const testVar = true;
     return (
         <div className="homepageContainer">
             {
@@ -64,7 +61,7 @@ const Homepage = ({ portfolioDb, setPortfolioImages, setImagesDownloading, isDow
 }
 
 const mapStateToProps = (state) => ({
-    portfolioDb: state.portfolio.portfolioDb,
+    portfolioData: state.portfolio.portfolioData,
     isDownloading: state.portfolio.isDownloading
 });
 

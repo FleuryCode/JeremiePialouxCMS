@@ -6,13 +6,22 @@ import AddImageButton from "../addImageButton/addImageButton.component";
 // Redux
 import { connect } from "react-redux";
 
-const HomeSection = ({ images }) => {
+const HomeSection = ({ images, data }) => {
+    
+    let allImageData = data;
+    if (images.length === data.length) {
+        for (let i = 0; i < data.length; i++) {
+            allImageData[i].heroUrl = images[i];
+        }
+    }
+    
+
     return (
         <div className="homeSectionContainer">
             <div className="portfolioContainer">
                 {
-                    images.map(image => (
-                        <PortfolioImage key={image} image={image} />
+                    allImageData.map(data => (
+                        <PortfolioImage key={data.id} image={data.heroUrl} />
                     ))
                 }
             </div>
@@ -24,7 +33,8 @@ const HomeSection = ({ images }) => {
 }
 
 const mapStateToProps = (state) => ({
-    images: state.portfolio.portfolioImages
+    images: state.portfolio.portfolioImages,
+    data: state.portfolio.portfolioData
 });
 
 export default connect(mapStateToProps)(HomeSection);

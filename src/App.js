@@ -5,28 +5,22 @@ import SignIn from './pages/signin/signIn.page';
 import Homepage from './pages/homepage/homePage.page';
 // Redux
 import { connect } from 'react-redux';
-import { setPortfolioDb, setPortfolioData } from './redux/portfolio/portfolio.actions';
+import { setPortfolioData } from './redux/portfolio/portfolio.actions';
 // Firebase
 import firebaseApp, { db } from './firebase/firebase.utils';
 import { doc, onSnapshot } from "firebase/firestore";
 
 
 
-function App({ loggedIn, setPortfolioDb, setPortfolioData }) {
+function App({ loggedIn, setPortfolioData }) {
 
   const dataArray = onSnapshot(doc(db, 'Portfolio', 'MainPortfolio'), (doc) => {
     const data = doc.data().images;
-    setPortfolioData(doc.data());
     // Organizing based on ID.
     data.sort((a, b) => {
       return a.id - b.id;
     });
-    let imageNameArray = [];
-    data.forEach((image) => {
-      imageNameArray.push(image.imageName);
-    });
-
-    setPortfolioDb(imageNameArray);
+    setPortfolioData(data);
   });
 
   useEffect(() => {
@@ -47,7 +41,6 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  setPortfolioDb: portfolioData => dispatch(setPortfolioDb(portfolioData)),
   setPortfolioData: data => dispatch(setPortfolioData(data))
 });
 

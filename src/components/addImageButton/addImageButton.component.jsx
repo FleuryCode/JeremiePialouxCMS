@@ -65,7 +65,7 @@ const AddImageButton = ({ portfolioData }) => {
                         <span className="visually-hidden">Loading...</span>
                     </div>
                     :
-                    <img src={PlusIcon} alt="Add image button" />
+                    <img src={PlusIcon} alt="Add button" />
                 }
                 
             </div>
