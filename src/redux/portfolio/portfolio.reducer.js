@@ -2,7 +2,6 @@ import { PortfolioTypes } from "./portfolio.types";
 
 const INITIAL_STATE = {
     portfolioData: [],
-    portfolioDb: [],
     portfolioImages: [],
     isDownloading: true
 };
@@ -13,11 +12,6 @@ const portfolioReducer = (state = INITIAL_STATE, action) => {
             return {
                 ...state,
                 portfolioData: action.payload
-            };
-        case PortfolioTypes.SET_PORTFOLIO_DB:
-            return {
-                ...state,
-                portfolioDb: action.payload
             };
         case PortfolioTypes.SET_PORTFOLIO_IMAGES:
             return {

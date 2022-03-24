@@ -5,11 +5,6 @@ export const setPortfolioData = (data) => ({
     payload: data
 });
 
-export const setPortfolioDb = (dbArray) => ({
-    type: PortfolioTypes.SET_PORTFOLIO_DB,
-    payload: dbArray
-});
-
 export const setPortfolioImages = (imageArray) => ({
     type: PortfolioTypes.SET_PORTFOLIO_IMAGES,
     payload: imageArray
