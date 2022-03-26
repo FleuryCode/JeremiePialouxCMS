@@ -6,13 +6,13 @@ import HomeSection from "../../components/homeSection/homeSection.component";
 import EditTextSection from '../../components/editTextSection/editTextSection.component';
 // Redux
 import { connect } from "react-redux";
-import { setPortfolioImages, setImagesDownloading } from "../../redux/portfolio/portfolio.actions";
+import { setPortfolioImages, setImagesDownloading, setPortfolioData } from "../../redux/portfolio/portfolio.actions";
 // Firebase
 import { storage } from "../../firebase/firebase.utils";
 import { getDownloadURL, ref } from "firebase/storage";
 
 
-const Homepage = ({ setPortfolioImages, setImagesDownloading, isDownloading, portfolioData }) => {
+const Homepage = ({ setPortfolioImages, setImagesDownloading, setPortfolioData, isDownloading, portfolioData }) => {
 
     // Downloading Images From Storage
     const getImages = async () => {
@@ -29,6 +29,14 @@ const Homepage = ({ setPortfolioImages, setImagesDownloading, isDownloading, por
             };
             setPortfolioImages(imageUrls);
             setImagesDownloading(false);
+            // This is where we should update data I believe.
+            let allImageData = portfolioData;
+            if (imageUrls.length === portfolioData.length) {
+                for (let i = 0; i < portfolioData.length; i++) {
+                    allImageData[i].heroUrl = imageUrls[i];
+                }
+                setPortfolioData(allImageData);
+            }
         }
     };
 
@@ -67,7 +75,8 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
     setPortfolioImages: images => dispatch(setPortfolioImages(images)),
-    setImagesDownloading: isDownloading => dispatch(setImagesDownloading(isDownloading))
+    setImagesDownloading: isDownloading => dispatch(setImagesDownloading(isDownloading)),
+    setPortfolioData: data => dispatch(setPortfolioData(data))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Homepage);

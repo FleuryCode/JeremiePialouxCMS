@@ -1,29 +1,38 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import './homeSection.styles.scss';
 import PortfolioImage from "../portfolioImage/portfolioImage.component";
 import AddImageButton from "../addImageButton/addImageButton.component";
-
 // Redux
 import { connect } from "react-redux";
+// Sorting
+import Gallery from "react-photo-gallery";
+import { arrayMoveImmutable } from "array-move";
+import { SortableContainer, SortableElement } from "react-sortable-hoc";
 
-const HomeSection = ({ images, data }) => {
+const SortablePhoto = SortableElement(item => <PortfolioImage {...item} />);
+const SortableGallery = SortableContainer(({ items }) => (
+    <Gallery photos={items} renderImage={props => <SortablePhoto {...props} />} />
+));
+
+const HomeSection = ({ data }) => {
+    const [items, setItems] = useState(data);
+
+
+    const onSortEnd = ({ oldIndex, newIndex }) => {
+        setItems(arrayMoveImmutable(items, oldIndex, newIndex));
+    };
+
     
-    let allImageData = data;
-    if (images.length === data.length) {
-        for (let i = 0; i < data.length; i++) {
-            allImageData[i].heroUrl = images[i];
-        }
-    }
-    
+
+
+
+
+
 
     return (
         <div className="homeSectionContainer">
             <div className="portfolioContainer">
-                {
-                    allImageData.map(data => (
-                        <PortfolioImage key={data.id} image={data.heroUrl} />
-                    ))
-                }
+                <SortableGallery items={items} onSortEnd={onSortEnd} axis={"xy"} />
             </div>
             <div className="buttonContainer">
                 <AddImageButton />
@@ -33,7 +42,6 @@ const HomeSection = ({ images, data }) => {
 }
 
 const mapStateToProps = (state) => ({
-    images: state.portfolio.portfolioImages,
     data: state.portfolio.portfolioData
 });
 
