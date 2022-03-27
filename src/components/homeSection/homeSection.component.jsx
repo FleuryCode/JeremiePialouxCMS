@@ -22,20 +22,24 @@ const HomeSection = ({ data }) => {
         setItems(arrayMoveImmutable(items, oldIndex, newIndex));
     };
 
-    
-
-
-
-
+    const testClick = () => {
+        console.log(items);
+    }
 
 
     return (
         <div className="homeSectionContainer">
-            <div className="portfolioContainer">
-                <SortableGallery items={items} onSortEnd={onSortEnd} axis={"xy"} />
+            <div className="imagesAndButtonsContainer">
+                <div className="portfolioContainer">
+                    <SortableGallery items={items} onSortEnd={onSortEnd} axis={"xy"} />
+                </div>
+                <div className="buttonContainer">
+                    <AddImageButton />
+                </div>
             </div>
-            <div className="buttonContainer">
-                <AddImageButton />
+
+            <div className="testContainer">
+                <button onClick={testClick}>Test</button>
             </div>
         </div>
     );
