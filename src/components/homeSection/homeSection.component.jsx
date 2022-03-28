@@ -19,9 +19,10 @@ export const SortableGallery = SortableContainer(({ items }) => (
     <Gallery photos={items} renderImage={props => <SortablePhoto {...props} />} />
 ));
 
-const HomeSection = ({ data, images }) => {
+const HomeSection = ({ data, images, isDownloading }) => {
     const [items, setItems] = useState({});
     const [changed, setChanged] = useState(false);
+    const [activeIndex, setActiveIndex] = useState(0);
 
     useEffect(() => {
         let fullData = data;
@@ -40,44 +41,41 @@ const HomeSection = ({ data, images }) => {
         const portfolioRef = doc(db, 'Portfolio', 'MainPortfolio');
         let uploadData = data;
         uploadData.images = items;
-       
+
         for (let i = 0; i < items.length; i++) {
             uploadData.images[i].id = (i + 1);
             uploadData.images[i].key = `${i + 1}`;
         }
-        
+
         await updateDoc(portfolioRef, uploadData);
         console.log('Complete Change');
         setChanged(false)
     }
 
-    const testClick = () => {
-        console.log('Items', items);
-        console.log('Data.images', data.images);
-    }
-
-
-    
-
-
-
+    const handleSelectorClick = (index, specificImage) => {
+        setActiveIndex(index);
+        console.log(specificImage);
+    };
     return (
         <div className="homeSectionContainer">
-            <div className="imagesAndButtonsContainer">
-                <div className="portfolioContainer">
-                    <SortableGallery items={items} onSortEnd={onSortEnd} axis={"xy"} />
+            <div className="buttonContainer">
+                <AddImageButton />
 
-                </div>
-                <div className="buttonContainer">
-                    <AddImageButton />
-                    <div onClick={onSaveOrderClick} className={`${(changed) ? 'd-flex' : 'd-none'} saveOrderButton`}>
-                        Enregistrer
-                    </div>
+            </div>
+            <div className={`${isDownloading ? 'd-none' : 'd-flex'} portfolioContainer`}>
+                <SortableGallery items={items} onSortEnd={onSortEnd} axis={"xy"} />
+                <div onClick={onSaveOrderClick} className={`${(changed) ? 'd-flex' : 'd-none'} saveOrderButton`}>
+                    Enregistrer
                 </div>
             </div>
-
-            <div className="testContainer">
-                <button onClick={testClick}>Test</button>
+            <div className="individualImageSelectors">
+                {
+                    data.images.map((image, index) => (
+                        <div onClick={() => handleSelectorClick(index, image)} key={image.id} className="imageSelector">
+                            <img className={`${(activeIndex === index) ? 'active' : ''}`} src={image.src} alt={image.title} />
+                        </div>
+                    ))
+                }
             </div>
         </div>
     );
@@ -85,8 +83,8 @@ const HomeSection = ({ data, images }) => {
 
 const mapStateToProps = (state) => ({
     data: state.portfolio.portfolioData,
-    images: state.portfolio.portfolioImages
-    // Add is uploading. Try it out.
+    images: state.portfolio.portfolioImages,
+    isDownloading: state.portfolio.isDownloading
 });
 
 
