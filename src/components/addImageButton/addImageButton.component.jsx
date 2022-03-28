@@ -40,8 +40,8 @@ const AddImageButton = ({ portfolioData }) => {
                                 link: fileArray[i].name.replace(/\.[^/.]+$/, "").toLowerCase().replace(/ /g,''),
                                 description: '',
                                 otherImages: [fileArray[i].name],
-                                height: '',
-                                width: '',
+                                height: 1,
+                                width: 1,
                                 src: ''
                             }
                         );
