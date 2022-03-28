@@ -6,51 +6,8 @@ import HomeSection from "../../components/homeSection/homeSection.component";
 import EditTextSection from '../../components/editTextSection/editTextSection.component';
 // Redux
 import { connect } from "react-redux";
-import { setPortfolioImages, setImagesDownloading, setPortfolioData } from "../../redux/portfolio/portfolio.actions";
-// Firebase
-import { storage } from "../../firebase/firebase.utils";
-import { getDownloadURL, ref } from "firebase/storage";
 
-
-const Homepage = ({ setPortfolioImages, setImagesDownloading, setPortfolioData, isDownloading, portfolioData }) => {
-
-
-    // Downloading Images From Storage
-    const getImages = async () => {
-
-        try {
-            if (portfolioData.images.length > 0) {
-                let imageUrls = [];
-                for (let i = 0; i < portfolioData.images.length; i++) {
-                    await getDownloadURL(ref(storage, `Portfolio/${portfolioData.images[i].imageName}`))
-                        .then((url) => {
-                            imageUrls.push(url);
-                        })
-                        .catch((error) => {
-                            console.log(error);
-                        });
-                };
-                setPortfolioImages(imageUrls);
-                setImagesDownloading(false);
-                // This is where we should update data I believe.
-                let allImageData = portfolioData;
-                if (imageUrls.length === portfolioData.images.length) {
-                    for (let i = 0; i < portfolioData.images.length; i++) {
-                        allImageData.images[i].heroUrl = imageUrls[i];
-                    }
-                    setPortfolioData(allImageData);
-                }
-            }
-        } catch (error) {
-            console.log('Please wait.')
-        }
-
-
-    };
-
-    useEffect(() => {
-        getImages();
-    }, [portfolioData]);
+const Homepage = ({ isDownloading }) => {
 
     return (
         <div className="homepageContainer">
@@ -77,14 +34,9 @@ const Homepage = ({ setPortfolioImages, setImagesDownloading, setPortfolioData, 
 }
 
 const mapStateToProps = (state) => ({
-    portfolioData: state.portfolio.portfolioData,
     isDownloading: state.portfolio.isDownloading
 });
 
-const mapDispatchToProps = (dispatch) => ({
-    setPortfolioImages: images => dispatch(setPortfolioImages(images)),
-    setImagesDownloading: isDownloading => dispatch(setImagesDownloading(isDownloading)),
-    setPortfolioData: data => dispatch(setPortfolioData(data))
-});
 
-export default connect(mapStateToProps, mapDispatchToProps)(Homepage);
+
+export default connect(mapStateToProps)(Homepage);

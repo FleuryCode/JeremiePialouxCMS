@@ -34,13 +34,15 @@ const AddImageButton = ({ portfolioData }) => {
                         portfolioData.images.push(
                             {
                                 id: portfolioData.images.length + 1,
+                                key: `${portfolioData.images.length + 1}`,
                                 imageName: fileArray[i].name,
                                 title: fileArray[i].name.replace(/\.[^/.]+$/, ""),
                                 link: fileArray[i].name.replace(/\.[^/.]+$/, "").toLowerCase().replace(/ /g,''),
                                 description: '',
                                 otherImages: [fileArray[i].name],
                                 height: '',
-                                width: ''
+                                width: '',
+                                src: ''
                             }
                         );
                     })
