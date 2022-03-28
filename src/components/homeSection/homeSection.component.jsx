@@ -14,21 +14,16 @@ import { doc, updateDoc } from "firebase/firestore";
 
 // Turn these into components.
 const SortablePhoto = SortableElement(item => <PortfolioImage {...item} />);
-const SortableGallery = SortableContainer(({ items }) => (
+export const SortableGallery = SortableContainer(({ items }) => (
     <Gallery photos={items} renderImage={props => <SortablePhoto {...props} />} />
 ));
 
 const HomeSection = ({ data }) => {
-    console.log(data);
-    
     const [items, setItems] = useState(data.images);
     const [changed, setChanged] = useState(false);
     data.images = items;
 
-    useEffect(() => {
-        setChanged(false);
-        console.log('Hey')
-    }, [data]);
+    console.log(data);
 
     const onSortEnd = ({ oldIndex, newIndex }) => {
         setItems(arrayMoveImmutable(items, oldIndex, newIndex));
@@ -57,7 +52,7 @@ const HomeSection = ({ data }) => {
                     <SortableGallery items={items} onSortEnd={onSortEnd} axis={"xy"} />
                 </div>
                 <div className="buttonContainer">
-                    <AddImageButton onClick={testClick} />
+                    <AddImageButton />
                     <div onClick={onSaveOrderClick} className={`${(changed) ? 'd-flex' : 'd-none'} saveOrderButton`}>
                         Enregistrer
                     </div>
