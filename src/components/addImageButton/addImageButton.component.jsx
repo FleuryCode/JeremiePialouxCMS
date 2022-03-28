@@ -38,7 +38,9 @@ const AddImageButton = ({ portfolioData }) => {
                                 title: fileArray[i].name.replace(/\.[^/.]+$/, ""),
                                 link: fileArray[i].name.replace(/\.[^/.]+$/, "").toLowerCase().replace(/ /g,''),
                                 description: '',
-                                otherImages: [fileArray[i].name]
+                                otherImages: [fileArray[i].name],
+                                height: '',
+                                width: ''
                             }
                         );
                     })
@@ -48,7 +50,7 @@ const AddImageButton = ({ portfolioData }) => {
 
             }
             // Waits until loop is done
-            console.log('Loop is complate', portfolioData);
+            console.log('Loop is complete', portfolioData);
             const portfolioRef = doc(db, 'Portfolio', 'MainPortfolio');
             await updateDoc(portfolioRef, portfolioData);
             console.log('Huzzah!');

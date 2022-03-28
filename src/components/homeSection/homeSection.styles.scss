@@ -21,7 +21,28 @@
             width: 20%;
             display: flex;
             margin-top: 4%;
-            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+
+            .saveOrderButton {
+                margin-top: 12%;
+                width: 50%;
+                background-color: rgb(168, 223, 137);
+                justify-content: center;
+                align-items: center;
+                padding: 3%;
+                border-radius: 8px;
+                font-size: 120%;
+                color: white;
+                box-shadow: 0 4px 4px rgba(0, 0, 0, 0.4);
+                text-transform: uppercase;
+                font-weight: 600;
+                transition: 0.6s;
+                cursor: pointer;
+                &:hover {
+                    background-color: rgb(95, 148, 46);
+                }
+            }
         }
     }
     

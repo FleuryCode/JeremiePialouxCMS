@@ -15,9 +15,9 @@ import { doc, onSnapshot } from "firebase/firestore";
 function App({ loggedIn, setPortfolioData }) {
 
   const dataArray = onSnapshot(doc(db, 'Portfolio', 'MainPortfolio'), (doc) => {
-    const data = doc.data().images;
+    const data = doc.data();
     // Organizing based on ID.
-    data.sort((a, b) => {
+    data.images.sort((a, b) => {
       return a.id - b.id;
     });
     setPortfolioData(data);

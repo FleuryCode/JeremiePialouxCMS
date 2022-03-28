@@ -14,30 +14,38 @@ import { getDownloadURL, ref } from "firebase/storage";
 
 const Homepage = ({ setPortfolioImages, setImagesDownloading, setPortfolioData, isDownloading, portfolioData }) => {
 
+
     // Downloading Images From Storage
     const getImages = async () => {
-        if (portfolioData.length > 0) {
-            let imageUrls = [];
-            for (let i = 0; i < portfolioData.length; i++) {
-                await getDownloadURL(ref(storage, `Portfolio/${portfolioData[i].imageName}`))
-                    .then((url) => {
-                        imageUrls.push(url);
-                    })
-                    .catch((error) => {
-                        console.log(error);
-                    });
-            };
-            setPortfolioImages(imageUrls);
-            setImagesDownloading(false);
-            // This is where we should update data I believe.
-            let allImageData = portfolioData;
-            if (imageUrls.length === portfolioData.length) {
-                for (let i = 0; i < portfolioData.length; i++) {
-                    allImageData[i].heroUrl = imageUrls[i];
+
+        try {
+            if (portfolioData.images.length > 0) {
+                let imageUrls = [];
+                for (let i = 0; i < portfolioData.images.length; i++) {
+                    await getDownloadURL(ref(storage, `Portfolio/${portfolioData.images[i].imageName}`))
+                        .then((url) => {
+                            imageUrls.push(url);
+                        })
+                        .catch((error) => {
+                            console.log(error);
+                        });
+                };
+                setPortfolioImages(imageUrls);
+                setImagesDownloading(false);
+                // This is where we should update data I believe.
+                let allImageData = portfolioData;
+                if (imageUrls.length === portfolioData.images.length) {
+                    for (let i = 0; i < portfolioData.images.length; i++) {
+                        allImageData.images[i].heroUrl = imageUrls[i];
+                    }
+                    setPortfolioData(allImageData);
                 }
-                setPortfolioData(allImageData);
             }
+        } catch (error) {
+            console.log('Please wait.')
         }
+
+
     };
 
     useEffect(() => {
