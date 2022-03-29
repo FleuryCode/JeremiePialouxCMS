@@ -11,6 +11,7 @@ import { SortableContainer, SortableElement } from "react-sortable-hoc";
 // Firebase
 import { db } from "../../firebase/firebase.utils";
 import { doc, updateDoc } from "firebase/firestore";
+import IndividualImage from "../individualImage/individualImage.component";
 
 // Turn these into components.
 
@@ -54,8 +55,8 @@ const HomeSection = ({ data, images, isDownloading }) => {
 
     const handleSelectorClick = (index, specificImage) => {
         setActiveIndex(index);
-        console.log(specificImage);
     };
+
     return (
         <div className="homeSectionContainer">
             <div className="buttonContainer">
@@ -76,6 +77,9 @@ const HomeSection = ({ data, images, isDownloading }) => {
                         </div>
                     ))
                 }
+            </div>
+            <div className="individualImageComponentContainer">
+                <IndividualImage data={data} index={activeIndex} />
             </div>
         </div>
     );

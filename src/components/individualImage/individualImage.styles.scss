@@ -1,0 +1,37 @@
+.individualImageContainer {
+    background-color: red;
+    width: 100%;
+    padding: 4%;
+    display: flex;
+
+    .heroImageContainer {
+        width: 40%;
+
+        img {
+            width: 100%;
+            object-fit: cover;
+        }
+    }
+
+    .individualImageInfoContainer {
+        width: 60%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding-left: 4%;
+
+        h4 {
+            text-align: center;
+            color: white;
+            font-size: 180%;
+            display: flex;
+            border-bottom: 1px solid white;
+            padding: 1%;
+            letter-spacing: 4px;
+        }
+        .individualImageInput {
+            margin-top: 4%;
+            width: 100%;
+        }
+    }
+}

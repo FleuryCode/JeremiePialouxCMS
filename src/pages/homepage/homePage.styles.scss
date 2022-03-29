@@ -24,8 +24,10 @@
         display: flex;
 
         .servicesPagesContainer {
-            padding: 2%;
-            width: 92vw;
+            width: 91vw;
+            padding: 1.5%;
+            display: flex;
+            justify-content: center;
         }
     }
 }
