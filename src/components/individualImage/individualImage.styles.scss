@@ -32,6 +32,24 @@
         .individualImageInput {
             margin-top: 4%;
             width: 100%;
+
+            .inputLabel {
+                color: rgba(245, 245, 245, 0.8);
+                font-size: 120%;
+                font-weight: 400;
+                margin-bottom: 1%;
+            }
+
+            .dimensionContainer {
+                width: 100%;
+                display: flex;
+                .heightBox {
+                    width: 45%;
+                }
+                .widthBox {
+                    width: 45%;
+                }
+            }
         }
     }
 }
