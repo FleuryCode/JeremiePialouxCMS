@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react";
 import CustomInput from "../customInput/customInput.component";
 import CustomTextBox from "../customTextBox/customTextBox.component";
 import './individualImage.styles.scss';
+// Firebase
+import { doc, updateDoc } from "firebase/firestore";
+import { db } from '../../firebase/firebase.utils';
 
 const IndividualImage = ({ data, index }) => {
     // console.log(data.images[index]);
@@ -14,6 +17,7 @@ const IndividualImage = ({ data, index }) => {
     const [height, setHeight] = useState('');
     const [width, setWidth] = useState('');
     const [technique, setTechnique] = useState('');
+    const [updating, setUpdating] = useState(false);
 
     useEffect(() => {
         setTitle(pickedImage.title);
@@ -49,6 +53,30 @@ const IndividualImage = ({ data, index }) => {
             default:
                 break;
         }
+    };
+
+    // Save Button
+    const saveButtonHandle = async () => {
+        const dbRef = doc(db, 'Portfolio', 'MainPortfolio');
+        setUpdating(true);
+        let updatedData = data;
+        updatedData.images[index] = {
+            id: data.images[index].id,
+            key: data.images[index].key,
+            height: data.images[index].height,
+            width: data.images[index].width,
+            link: data.images[index].link,
+            imageName: data.images[index].imageName,
+            otherImages: data.images[index].otherImages,
+            title: title,
+            description: description,
+            creationDate: creationDate,
+            realHeight: height,
+            realWidth: width,
+            technique: technique
+        }
+        await updateDoc(dbRef, updatedData);
+        setUpdating(false);
     }
     return (
         <div className="individualImageContainer">
@@ -77,7 +105,10 @@ const IndividualImage = ({ data, index }) => {
                     <label className="inputLabel" htmlFor="description">Description</label>
                     <CustomTextBox id={'description'} name={'description'} value={description} onChange={onInputChange} placeholder={'Description'} />
                     <div className="dataSaveButton">
-                        <h5>Sauvegarder</h5>
+                        <div className={`${updating ? 'd-flex' : 'd-none'} spinner-border`} role="status">
+                            <span className="visually-hidden">Loading...</span>
+                        </div>
+                        <h5 onClick={saveButtonHandle}>Sauvegarder</h5>
                     </div>
                 </div>
 
