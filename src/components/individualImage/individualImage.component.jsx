@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
+import './individualImage.styles.scss';
 import CustomInput from "../customInput/customInput.component";
 import CustomTextBox from "../customTextBox/customTextBox.component";
-import './individualImage.styles.scss';
+import { ReactComponent as DeleteIcon } from '../../assets/deleteIcon.svg';
 // Firebase
 import { doc, updateDoc } from "firebase/firestore";
 import { db } from '../../firebase/firebase.utils';
@@ -78,6 +79,11 @@ const IndividualImage = ({ data, index }) => {
         await updateDoc(dbRef, updatedData);
         setUpdating(false);
     }
+    // Delete Button
+    const deleteButtonHandle = () => {
+        console.log('Delete!');
+    }
+
     return (
         <div className="individualImageContainer">
             <div className="heroImageContainer">
@@ -105,6 +111,9 @@ const IndividualImage = ({ data, index }) => {
                     <label className="inputLabel" htmlFor="description">Description</label>
                     <CustomTextBox id={'description'} name={'description'} value={description} onChange={onInputChange} placeholder={'Description'} />
                     <div className="dataSaveButton">
+                        <div onClick={deleteButtonHandle} className="deleteButtonContainer me-auto ms-5">
+                            <DeleteIcon />
+                        </div>
                         <div className={`${updating ? 'd-flex' : 'd-none'} spinner-border`} role="status">
                             <span className="visually-hidden">Loading...</span>
                         </div>

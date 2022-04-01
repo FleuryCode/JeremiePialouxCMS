@@ -72,6 +72,16 @@
                         color: rgb(36, 97, 36);
                     }
                 }
+
+                .deleteButtonContainer {
+                    cursor: pointer;
+                    svg {
+                        transition: 0.2s;
+                        &:hover {
+                            fill: #A73131;
+                        }
+                    }
+                }
             }
         }
     }
