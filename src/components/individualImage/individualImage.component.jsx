@@ -10,13 +10,18 @@ const IndividualImage = ({ data, index }) => {
     // Add placeholders! Do Use Effect. Change metadata.
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
-    const [creationDate, setCreationDate] = useState('Fevrier 2022');
-    const [height, setHeight] = useState('100 cm');
-    const [width, setWidth] = useState('50 cm');
+    const [creationDate, setCreationDate] = useState('');
+    const [height, setHeight] = useState('');
+    const [width, setWidth] = useState('');
+    const [technique, setTechnique] = useState('');
 
     useEffect(() => {
         setTitle(pickedImage.title);
         setDescription(pickedImage.description);
+        setCreationDate(pickedImage.creationDate);
+        setHeight(pickedImage.realHeight);
+        setWidth(pickedImage.realWidth);
+        setTechnique(pickedImage.technique);
     }, [pickedImage]);
 
     // On Change
@@ -38,6 +43,9 @@ const IndividualImage = ({ data, index }) => {
             case 'width':
                 setWidth(value);
                 break;
+            case 'technique':
+                setTechnique(value);
+                break;
             default:
                 break;
         }
@@ -53,19 +61,24 @@ const IndividualImage = ({ data, index }) => {
                     <label className="inputLabel" htmlFor="title">Titre</label>
                     <CustomInput id={'title'} type={'text'} name={'title'} value={title} onChange={onInputChange} />
                     <label className="inputLabel" htmlFor="creationDate">Date de Creation</label>
-                    <CustomInput id={'creationDate'} type={'text'} name={'creationDate'} value={creationDate} onChange={onInputChange} />
+                    <CustomInput id={'creationDate'} type={'text'} name={'creationDate'} value={creationDate} onChange={onInputChange} placeholder={'Fevrier 2022'} />
                     <div className="dimensionContainer">
                         <div className="heightBox">
                             <label className="inputLabel" htmlFor="height">Hauteur</label>
-                            <CustomInput id={'height'} type={'text'} name={'height'} value={height} onChange={onInputChange} />
+                            <CustomInput id={'height'} type={'text'} name={'height'} value={height} onChange={onInputChange} placeholder={'100 cm'} />
                         </div>
                         <div className="widthBox ms-auto">
                             <label className="inputLabel" htmlFor="height">Largeur</label>
-                            <CustomInput id={'width'} type={'text'} name={'width'} value={width} onChange={onInputChange} />
+                            <CustomInput id={'width'} type={'text'} name={'width'} value={width} onChange={onInputChange} placeholder={'50 cm'} />
                         </div>
                     </div>
+                    <label className="inputLabel" htmlFor="technique">Technique</label>
+                    <CustomTextBox id={'technique'} name={'technique'} value={technique} onChange={onInputChange} placeholder={'Technique'} />
                     <label className="inputLabel" htmlFor="description">Description</label>
-                    <CustomTextBox id={'description'} name={'description'} value={description} onChange={onInputChange} />
+                    <CustomTextBox id={'description'} name={'description'} value={description} onChange={onInputChange} placeholder={'Description'} />
+                    <div className="dataSaveButton">
+                        <h5>Sauvegarder</h5>
+                    </div>
                 </div>
 
 

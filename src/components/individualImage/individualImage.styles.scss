@@ -1,8 +1,9 @@
 .individualImageContainer {
-    background-color: red;
     width: 100%;
     padding: 4%;
     display: flex;
+    background-color: rgba(97, 97, 97, 0.3);
+    border-radius: 12px;
 
     .heroImageContainer {
         width: 40%;
@@ -48,6 +49,21 @@
                 }
                 .widthBox {
                     width: 45%;
+                }
+            }
+
+            .dataSaveButton {
+                display: flex;
+                justify-content: end;
+                margin-top: 20px;
+                h5 {
+                    color: rgb(75, 151, 75);
+                    cursor: pointer;
+                    transition: 0.4s ease-in-out;
+
+                    &:hover {
+                        color: rgb(36, 97, 36);
+                    }
                 }
             }
         }

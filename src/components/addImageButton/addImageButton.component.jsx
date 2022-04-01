@@ -39,9 +39,13 @@ const AddImageButton = ({ portfolioData }) => {
                                 title: fileArray[i].name.replace(/\.[^/.]+$/, ""),
                                 link: fileArray[i].name.replace(/\.[^/.]+$/, "").toLowerCase().replace(/ /g,''),
                                 description: '',
+                                technique: '',
+                                creationDate: '',
                                 otherImages: [fileArray[i].name],
                                 height: 1,
                                 width: 1,
+                                realHeight: '',
+                                realWidth: '',
                                 src: ''
                             }
                         );
