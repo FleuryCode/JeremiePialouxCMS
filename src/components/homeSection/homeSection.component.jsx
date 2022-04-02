@@ -63,7 +63,7 @@ const HomeSection = ({ data, images, isDownloading }) => {
                 <AddImageButton />
 
             </div>
-            <div className={`${isDownloading ? 'd-none' : 'd-flex'} portfolioContainer`}>
+            {/* <div className={`${isDownloading ? 'd-none' : 'd-flex'} portfolioContainer`}>
                 <SortableGallery items={items} onSortEnd={onSortEnd} axis={"xy"} />
                 <div onClick={onSaveOrderClick} className={`${(changed) ? 'd-flex' : 'd-none'} saveOrderButton`}>
                     Enregistrer
@@ -80,7 +80,7 @@ const HomeSection = ({ data, images, isDownloading }) => {
             </div>
             <div className="individualImageComponentContainer">
                 <IndividualImage data={data} index={activeIndex} />
-            </div>
+            </div> */}
         </div>
     );
 }

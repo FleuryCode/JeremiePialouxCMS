@@ -9,10 +9,11 @@ import { connect } from "react-redux";
 
 const Homepage = ({ isDownloading }) => {
 
+    const test = false;
     return (
         <div className="homepageContainer">
             {
-                isDownloading ?
+                false ?
                     <div className="loadingLogo">
                         <h1>JP</h1>
                     </div>

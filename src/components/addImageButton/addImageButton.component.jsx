@@ -30,6 +30,7 @@ const AddImageButton = ({ portfolioData }) => {
                 // Upload to Storage
                 await uploadBytes(storageRef, fileArray[i], metadata)
                     .then((snapshot) => {
+                        console.log(snapshot);
                         console.log('Storage Done')
                         portfolioData.images.push(
                             {
