@@ -26,11 +26,7 @@ const HomeSection = ({ data, images, isDownloading }) => {
     const [activeIndex, setActiveIndex] = useState(0);
 
     useEffect(() => {
-        let fullData = data;
-        for (let j = 0; j < images.length; j++) {
-            fullData[j].src = images[j];
-        };
-        setItems(fullData);
+        setItems(data);
     }, [images]);
 
     const onSortEnd = ({ oldIndex, newIndex }) => {

@@ -27,6 +27,11 @@ function App({ loggedIn, setPortfolioData, setImagesDownloading, setPortfolioIma
         });
     };
 
+    for (let j = 0; j < imageUrls.length; j++) {
+      data[j].src = imageUrls[j];
+    
+    }
+
     setPortfolioData(data);
     setPortfolioImages(imageUrls);
     setImagesDownloading(false);
