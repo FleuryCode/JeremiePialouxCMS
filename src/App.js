@@ -15,10 +15,10 @@ import { getDownloadURL, ref } from 'firebase/storage';
 
 function App({ loggedIn, setPortfolioData, setImagesDownloading, setPortfolioImages }) {
 
-  const getImageUrls = async (data, dataArray) => {
+  const getImageUrls = async (data) => {
     let imageUrls = [];
-    for (let i = 0; i < dataArray.length; i++) {
-      await getDownloadURL(ref(storage, `Portfolio/${dataArray[i].imageName}`))
+    for (let i = 0; i < data.length; i++) {
+      await getDownloadURL(ref(storage, `Portfolio/${data[i].imageName}`))
         .then((url) => {
           imageUrls.push(url);
         })
@@ -32,14 +32,14 @@ function App({ loggedIn, setPortfolioData, setImagesDownloading, setPortfolioIma
     setImagesDownloading(false);
   };
 
-  const dataArray = onSnapshot(doc(db, 'Portfolio', 'MainPortfolio'), (doc) => {
-    const data = doc.data();
-    // Organizing based on ID.
-    data.images.sort((a, b) => {
-      return a.id - b.id;
-    });
-    getImageUrls(data, data.images);
-  });
+  // const dataArray = onSnapshot(doc(db, 'Portfolio', 'MainPortfolio'), (doc) => {
+  //   const data = doc.data();
+  //   // Organizing based on ID.
+  //   data.images.sort((a, b) => {
+  //     return a.id - b.id;
+  //   });
+  //   getImageUrls(data, data.images);
+  // });
 
   const q = query(collection(db, 'Portfolio'));
   const portfolioDocuments = onSnapshot(q, (querySnapshot) => {
@@ -50,11 +50,10 @@ function App({ loggedIn, setPortfolioData, setImagesDownloading, setPortfolioIma
     portfolioDocs.sort((a, b) => {
       return a.id - b.id;
     });
-    console.log(portfolioDocs);
+    getImageUrls(portfolioDocs);
   });
 
   useEffect(() => {
-    dataArray();
     portfolioDocuments();
   }, []);
 

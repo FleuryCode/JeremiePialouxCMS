@@ -1,7 +1,7 @@
 import { PortfolioTypes } from "./portfolio.types";
 
 const INITIAL_STATE = {
-    portfolioData: {},
+    portfolioData: [],
     portfolioImages: [],
     isDownloading: true
 };
