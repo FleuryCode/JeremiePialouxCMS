@@ -9,7 +9,8 @@ import { db } from '../../firebase/firebase.utils';
 
 const IndividualImage = ({ data, index }) => {
     // console.log(data.images[index]);
-    const pickedImage = data.images[index];
+    const pickedImage = data[index];
+    
 
     // Add placeholders! Do Use Effect. Change metadata.
     const [title, setTitle] = useState('');
@@ -58,25 +59,17 @@ const IndividualImage = ({ data, index }) => {
 
     // Save Button
     const saveButtonHandle = async () => {
-        const dbRef = doc(db, 'Portfolio', 'MainPortfolio');
+        const dbRef = doc(db, 'Portfolio', `${pickedImage.imageName}`);
         setUpdating(true);
-        let updatedData = data;
-        updatedData.images[index] = {
-            id: data.images[index].id,
-            key: data.images[index].key,
-            height: data.images[index].height,
-            width: data.images[index].width,
-            link: data.images[index].link,
-            imageName: data.images[index].imageName,
-            otherImages: data.images[index].otherImages,
+        await updateDoc(dbRef, {
             title: title,
             description: description,
             creationDate: creationDate,
             realHeight: height,
             realWidth: width,
-            technique: technique
-        }
-        await updateDoc(dbRef, updatedData);
+            technique: technique,
+            link: title.replace(/\.[^/.]+$/, "").toLowerCase().replace(/ /g, '')
+        });
         setUpdating(false);
     }
     // Delete Button

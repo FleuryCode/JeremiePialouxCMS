@@ -28,9 +28,9 @@ const HomeSection = ({ data, images, isDownloading }) => {
     useEffect(() => {
         let fullData = data;
         for (let j = 0; j < images.length; j++) {
-            fullData.images[j].src = images[j];
+            fullData[j].src = images[j];
         };
-        setItems(fullData.images);
+        setItems(fullData);
     }, [images]);
 
     const onSortEnd = ({ oldIndex, newIndex }) => {
@@ -39,18 +39,19 @@ const HomeSection = ({ data, images, isDownloading }) => {
     };
 
     const onSaveOrderClick = async () => {
-        const portfolioRef = doc(db, 'Portfolio', 'MainPortfolio');
-        let uploadData = data;
-        uploadData.images = items;
-
+        console.log('Data', data);
+        console.log('Items', items);
         for (let i = 0; i < items.length; i++) {
-            uploadData.images[i].id = (i + 1);
-            uploadData.images[i].key = `${i + 1}`;
-        }
+            const docRef = doc(db, 'Portfolio', `${items[i].imageName}`);
+            await updateDoc(docRef, {
+                id: (i + 1),
+                key: `${i + 1}`
+            });
 
-        await updateDoc(portfolioRef, uploadData);
-        console.log('Complete Change');
-        setChanged(false)
+        }
+        setChanged(false);
+        console.log('Loop done?');
+        // Works but clunky. It is getting the data right away. Make a redux variable to change and draw data.
     }
 
     const handleSelectorClick = (index, specificImage) => {
@@ -71,7 +72,7 @@ const HomeSection = ({ data, images, isDownloading }) => {
             </div>
             <div className="individualImageSelectors">
                 {
-                    data.images.map((image, index) => (
+                    data.map((image, index) => (
                         <div onClick={() => handleSelectorClick(index, image)} key={image.id} className="imageSelector">
                             <img className={`${(activeIndex === index) ? 'active' : ''}`} src={image.src} alt={image.title} />
                         </div>
