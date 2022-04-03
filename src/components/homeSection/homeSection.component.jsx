@@ -4,6 +4,7 @@ import PortfolioImage from "../portfolioImage/portfolioImage.component";
 import AddImageButton from "../addImageButton/addImageButton.component";
 // Redux
 import { connect } from "react-redux";
+import { setCanDownload } from '../../redux/portfolio/portfolio.actions';
 // Sorting
 import Gallery from "react-photo-gallery";
 import { arrayMoveImmutable } from "array-move";
@@ -13,14 +14,13 @@ import { db } from "../../firebase/firebase.utils";
 import { doc, updateDoc } from "firebase/firestore";
 import IndividualImage from "../individualImage/individualImage.component";
 
-// Turn these into components.
 
 const SortablePhoto = SortableElement(item => <PortfolioImage {...item} />);
 export const SortableGallery = SortableContainer(({ items }) => (
     <Gallery photos={items} renderImage={props => <SortablePhoto {...props} />} />
 ));
 
-const HomeSection = ({ data, images, isDownloading }) => {
+const HomeSection = ({ data, images, isDownloading, setCanDownload }) => {
     const [items, setItems] = useState({});
     const [changed, setChanged] = useState(false);
     const [activeIndex, setActiveIndex] = useState(0);
@@ -35,8 +35,7 @@ const HomeSection = ({ data, images, isDownloading }) => {
     };
 
     const onSaveOrderClick = async () => {
-        console.log('Data', data);
-        console.log('Items', items);
+        setCanDownload(false);
         for (let i = 0; i < items.length; i++) {
             const docRef = doc(db, 'Portfolio', `${items[i].imageName}`);
             await updateDoc(docRef, {
@@ -46,6 +45,7 @@ const HomeSection = ({ data, images, isDownloading }) => {
 
         }
         setChanged(false);
+        setCanDownload(true);
         console.log('Loop done?');
         // Works but clunky. It is getting the data right away. Make a redux variable to change and draw data.
     }
@@ -88,5 +88,9 @@ const mapStateToProps = (state) => ({
     isDownloading: state.portfolio.isDownloading
 });
 
+const mapDispatchToProps = (dispatch) => ({
+    setCanDownload: canDownload => dispatch(setCanDownload(canDownload))
+});
 
-export default connect(mapStateToProps)(HomeSection);
+
+export default connect(mapStateToProps, mapDispatchToProps)(HomeSection);

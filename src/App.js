@@ -13,7 +13,8 @@ import { getDownloadURL, ref } from 'firebase/storage';
 
 
 
-function App({ loggedIn, setPortfolioData, setImagesDownloading, setPortfolioImages }) {
+function App({ loggedIn, canDownload, setPortfolioData, setImagesDownloading, setPortfolioImages }) {
+
 
   const getImageUrls = async (data) => {
     let imageUrls = [];
@@ -29,22 +30,16 @@ function App({ loggedIn, setPortfolioData, setImagesDownloading, setPortfolioIma
 
     for (let j = 0; j < imageUrls.length; j++) {
       data[j].src = imageUrls[j];
-    
+
     }
 
-    setPortfolioData(data);
-    setPortfolioImages(imageUrls);
-    setImagesDownloading(false);
-  };
+    if (canDownload) {
+      setPortfolioData(data);
+      setPortfolioImages(imageUrls);
+      setImagesDownloading(false);
+    }
 
-  // const dataArray = onSnapshot(doc(db, 'Portfolio', 'MainPortfolio'), (doc) => {
-  //   const data = doc.data();
-  //   // Organizing based on ID.
-  //   data.images.sort((a, b) => {
-  //     return a.id - b.id;
-  //   });
-  //   getImageUrls(data, data.images);
-  // });
+  };
 
   const q = query(collection(db, 'Portfolio'));
   const portfolioDocuments = onSnapshot(q, (querySnapshot) => {
@@ -73,6 +68,7 @@ function App({ loggedIn, setPortfolioData, setImagesDownloading, setPortfolioIma
 
 const mapStateToProps = (state) => ({
   loggedIn: state.user.loggedIn,
+  canDownload: state.portfolio.canDownload
 });
 
 const mapDispatchToProps = (dispatch) => ({

@@ -3,7 +3,8 @@ import { PortfolioTypes } from "./portfolio.types";
 const INITIAL_STATE = {
     portfolioData: [],
     portfolioImages: [],
-    isDownloading: true
+    isDownloading: true,
+    canDownload: true
 };
 
 const portfolioReducer = (state = INITIAL_STATE, action) => {
@@ -22,6 +23,11 @@ const portfolioReducer = (state = INITIAL_STATE, action) => {
             return {
                 ...state,
                 isDownloading: action.payload
+            };
+        case PortfolioTypes.SET_CAN_DOWNLOAD:
+            return {
+                ...state,
+                canDownload: action.payload
             };
         default:
             return state;

@@ -28,7 +28,7 @@ const IndividualImage = ({ data, index }) => {
         setHeight(pickedImage.realHeight);
         setWidth(pickedImage.realWidth);
         setTechnique(pickedImage.technique);
-    }, [pickedImage]);
+    }, [data]);
 
     // On Change
     const onInputChange = (event) => {
