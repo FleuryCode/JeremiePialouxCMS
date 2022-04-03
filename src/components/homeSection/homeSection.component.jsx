@@ -35,6 +35,7 @@ const HomeSection = ({ data, images, isDownloading, setCanDownload }) => {
     };
 
     const onSaveOrderClick = async () => {
+        // Try getting rid of loop and using KEYS of ones changed to update.
         setCanDownload(false);
         for (let i = 0; i < items.length; i++) {
             const docRef = doc(db, 'Portfolio', `${items[i].imageName}`);
