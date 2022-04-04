@@ -4,7 +4,7 @@ import PortfolioImage from "../portfolioImage/portfolioImage.component";
 import AddImageButton from "../addImageButton/addImageButton.component";
 // Redux
 import { connect } from "react-redux";
-import { setCanDownload } from '../../redux/portfolio/portfolio.actions';
+import { setPortfolioData } from "../../redux/portfolio/portfolio.actions";
 // Sorting
 import Gallery from "react-photo-gallery";
 import { arrayMoveImmutable } from "array-move";
@@ -20,14 +20,14 @@ export const SortableGallery = SortableContainer(({ items }) => (
     <Gallery photos={items} renderImage={props => <SortablePhoto {...props} />} />
 ));
 
-const HomeSection = ({ data, images, isDownloading, setCanDownload }) => {
+const HomeSection = ({ data, images, isDownloading, setPortfolioData }) => {
     const [items, setItems] = useState({});
     const [changed, setChanged] = useState(false);
     const [activeIndex, setActiveIndex] = useState(0);
 
     useEffect(() => {
         setItems(data);
-    }, [images]);
+    }, [data]);
 
     const onSortEnd = ({ oldIndex, newIndex }) => {
         setItems(arrayMoveImmutable(items, oldIndex, newIndex));
@@ -35,23 +35,22 @@ const HomeSection = ({ data, images, isDownloading, setCanDownload }) => {
     };
 
     const onSaveOrderClick = async () => {
-        // Try getting rid of loop and using KEYS of ones changed to update.
-        setCanDownload(false);
         for (let i = 0; i < items.length; i++) {
+            items[i].id = (i + 1);
+            items[i].key = `${i + 1}`;
             const docRef = doc(db, 'Portfolio', `${items[i].imageName}`);
             await updateDoc(docRef, {
                 id: (i + 1),
                 key: `${i + 1}`
             });
-
         }
+        
+        setPortfolioData(items);
         setChanged(false);
-        setCanDownload(true);
-        console.log('Loop done?');
-        // Works but clunky. It is getting the data right away. Make a redux variable to change and draw data.
+
     }
 
-    const handleSelectorClick = (index, specificImage) => {
+    const handleSelectorClick = (index) => {
         setActiveIndex(index);
     };
 
@@ -90,7 +89,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-    setCanDownload: canDownload => dispatch(setCanDownload(canDownload))
+    setPortfolioData: data => dispatch(setPortfolioData(data))
 });
 
 

@@ -8,54 +8,42 @@ import { connect } from 'react-redux';
 import { setPortfolioData, setImagesDownloading, setPortfolioImages } from './redux/portfolio/portfolio.actions';
 // Firebase
 import firebaseApp, { db, storage } from './firebase/firebase.utils';
-import { collection, doc, onSnapshot, query } from "firebase/firestore";
+import { collection, doc, getDocs, onSnapshot, query } from "firebase/firestore";
 import { getDownloadURL, ref } from 'firebase/storage';
 
 
 
 function App({ loggedIn, canDownload, setPortfolioData, setImagesDownloading, setPortfolioImages }) {
 
+  const getData = async () => {
+    let dataArray = [];
+    const querySnapshot = await getDocs(collection(db, 'Portfolio'));
+    querySnapshot.forEach((doc) => {
+      dataArray.push(doc.data());
+    });
+    dataArray.sort((a, b) => {
+      return a.id - b.id
+    });
 
-  const getImageUrls = async (data) => {
-    let imageUrls = [];
-    for (let i = 0; i < data.length; i++) {
-      await getDownloadURL(ref(storage, `Portfolio/${data[i].imageName}`))
+    for (let i = 0; i < dataArray.length; i++) {
+      await getDownloadURL(ref(storage, `Portfolio/${dataArray[i].imageName}`))
         .then((url) => {
-          imageUrls.push(url);
+          dataArray[i].src = url;
         })
         .catch((error) => {
           console.log(error);
         });
-    };
-
-    for (let j = 0; j < imageUrls.length; j++) {
-      data[j].src = imageUrls[j];
-
     }
-
-    if (canDownload) {
-      setPortfolioData(data);
-      setPortfolioImages(imageUrls);
-      setImagesDownloading(false);
-    }
-
+    // After Loop
+    setPortfolioData(dataArray);
+    setImagesDownloading(false);
   };
 
-  const q = query(collection(db, 'Portfolio'));
-  const portfolioDocuments = onSnapshot(q, (querySnapshot) => {
-    const portfolioDocs = [];
-    querySnapshot.forEach((doc) => {
-      portfolioDocs.push(doc.data());
-    });
-    portfolioDocs.sort((a, b) => {
-      return a.id - b.id;
-    });
-    getImageUrls(portfolioDocs);
-  });
-
   useEffect(() => {
-    portfolioDocuments();
+    getData();
   }, []);
+
+
 
   const devVar = true;
 

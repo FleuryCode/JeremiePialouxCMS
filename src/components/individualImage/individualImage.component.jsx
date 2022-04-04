@@ -4,21 +4,24 @@ import CustomInput from "../customInput/customInput.component";
 import CustomTextBox from "../customTextBox/customTextBox.component";
 import { ReactComponent as DeleteIcon } from '../../assets/deleteIcon.svg';
 // Firebase
-import { doc, updateDoc } from "firebase/firestore";
+import { doc, updateDoc, deleteDoc } from "firebase/firestore";
 import { db } from '../../firebase/firebase.utils';
+// Redux
+import { connect } from "react-redux";
+import { setPortfolioData } from "../../redux/portfolio/portfolio.actions";
 
-const IndividualImage = ({ data, index }) => {
+const IndividualImage = ({ data, index, setPortfolioData }) => {
     // console.log(data.images[index]);
     const pickedImage = data[index];
     
 
-    // Add placeholders! Do Use Effect. Change metadata.
-    const [title, setTitle] = useState('');
-    const [description, setDescription] = useState('');
-    const [creationDate, setCreationDate] = useState('');
-    const [height, setHeight] = useState('');
-    const [width, setWidth] = useState('');
-    const [technique, setTechnique] = useState('');
+    // Might need to redux selected index
+    const [title, setTitle] = useState(pickedImage.title);
+    const [description, setDescription] = useState(pickedImage.description);
+    const [creationDate, setCreationDate] = useState(pickedImage.creationDate);
+    const [height, setHeight] = useState(pickedImage.realHeight);
+    const [width, setWidth] = useState(pickedImage.realWidth);
+    const [technique, setTechnique] = useState(pickedImage.technique);
     const [updating, setUpdating] = useState(false);
 
     useEffect(() => {
@@ -28,10 +31,11 @@ const IndividualImage = ({ data, index }) => {
         setHeight(pickedImage.realHeight);
         setWidth(pickedImage.realWidth);
         setTechnique(pickedImage.technique);
-    }, [data]);
+    },[index])
 
     // On Change
     const onInputChange = (event) => {
+        event.preventDefault();
         const { value, name } = event.target;
         switch (name) {
             case 'title':
@@ -70,11 +74,28 @@ const IndividualImage = ({ data, index }) => {
             technique: technique,
             link: title.replace(/\.[^/.]+$/, "").toLowerCase().replace(/ /g, '')
         });
+
+        data[index].title = title;
+        data[index].description = description;
+        data[index].creationDate = creationDate;
+        data[index].realHeight = height;
+        data[index].realWidth = width;
+        data[index].technique = technique;
+        data[index].link = title.replace(/\.[^/.]+$/, "").toLowerCase().replace(/ /g, '');
+        setPortfolioData(data);
         setUpdating(false);
     }
+
     // Delete Button
     const deleteButtonHandle = () => {
-        console.log('Delete!');
+        
+        setUpdating(true);
+        // await deleteDoc(doc(db, `${pickedImage.imageName}`));
+        console.log('Done Deleting')
+        data.splice(index, 1);
+        console.log(data);
+        setPortfolioData(data);
+        setUpdating(false);
     }
 
     return (
@@ -113,11 +134,13 @@ const IndividualImage = ({ data, index }) => {
                         <h5 onClick={saveButtonHandle}>Sauvegarder</h5>
                     </div>
                 </div>
-
-
             </div>
         </div>
     );
 }
 
-export default IndividualImage;
+const mapDispatchToProps = (dispatch) => ({
+    setPortfolioData: data => dispatch(setPortfolioData(data))
+});
+
+export default connect(null, mapDispatchToProps)(IndividualImage);
