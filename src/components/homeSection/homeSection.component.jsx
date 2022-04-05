@@ -56,11 +56,12 @@ const HomeSection = ({ data, images, isDownloading, setPortfolioData }) => {
     };
 
     // Delete Button Click Not sure this is going to work.
-    const handleDelete = (data, index) => {
+    const handleDelete = async (data, index) => {
         setDeleting(true);
         data.splice(index, 1);
         console.log(data);
-        setPortfolioData(data);
+        await setPortfolioData(data);
+        setActiveIndex(0);
         setDeleting(false);
     }
 
