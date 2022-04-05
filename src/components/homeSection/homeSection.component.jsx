@@ -21,7 +21,7 @@ export const SortableGallery = SortableContainer(({ items }) => (
     <Gallery photos={items} renderImage={props => <SortablePhoto {...props} />} />
 ));
 
-const HomeSection = ({ data, images, isDownloading, setPortfolioData }) => {
+const HomeSection = ({ data, addedImages, isDownloading, setPortfolioData }) => {
     const [items, setItems] = useState({});
     const [changed, setChanged] = useState(false);
     const [activeIndex, setActiveIndex] = useState(0);
@@ -97,7 +97,7 @@ const HomeSection = ({ data, images, isDownloading, setPortfolioData }) => {
                 }
             </div>
             <div className="individualImageComponentContainer">
-                <IndividualImage data={data} index={activeIndex} deleteClick={handleDelete} />
+                <IndividualImage data={data} index={activeIndex} deleteClick={handleDelete} isDeleting={deleting} />
             </div>
         </div>
     );
@@ -105,8 +105,8 @@ const HomeSection = ({ data, images, isDownloading, setPortfolioData }) => {
 
 const mapStateToProps = (state) => ({
     data: state.portfolio.portfolioData,
-    images: state.portfolio.portfolioImages,
-    isDownloading: state.portfolio.isDownloading
+    isDownloading: state.portfolio.isDownloading,
+    addedImages: state.portfolio.addedImages
 });
 
 const mapDispatchToProps = (dispatch) => ({

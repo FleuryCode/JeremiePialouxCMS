@@ -1,11 +1,11 @@
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import SignIn from './pages/signin/signIn.page';
 import Homepage from './pages/homepage/homePage.page';
 // Redux
 import { connect } from 'react-redux';
-import { setPortfolioData, setImagesDownloading, setPortfolioImages } from './redux/portfolio/portfolio.actions';
+import { setPortfolioData, setImagesDownloading } from './redux/portfolio/portfolio.actions';
 // Firebase
 import firebaseApp, { db, storage } from './firebase/firebase.utils';
 import { collection, doc, getDocs, onSnapshot, query } from "firebase/firestore";
@@ -13,7 +13,10 @@ import { getDownloadURL, ref } from 'firebase/storage';
 
 
 
-function App({ loggedIn, canDownload, setPortfolioData, setImagesDownloading, setPortfolioImages }) {
+function App({ loggedIn, setPortfolioData, setImagesDownloading, addedImages }) {
+  const [testData, setTestData] = useState(true);
+
+  
 
   const getData = async () => {
     let dataArray = [];
@@ -41,7 +44,8 @@ function App({ loggedIn, canDownload, setPortfolioData, setImagesDownloading, se
 
   useEffect(() => {
     getData();
-  }, []);
+    console.log('Working');
+  }, [addedImages]);
 
 
 
@@ -56,13 +60,12 @@ function App({ loggedIn, canDownload, setPortfolioData, setImagesDownloading, se
 
 const mapStateToProps = (state) => ({
   loggedIn: state.user.loggedIn,
-  canDownload: state.portfolio.canDownload
+  addedImages: state.portfolio.addedImages
 });
 
 const mapDispatchToProps = (dispatch) => ({
   setPortfolioData: data => dispatch(setPortfolioData(data)),
-  setImagesDownloading: isDownloading => dispatch(setImagesDownloading(isDownloading)),
-  setPortfolioImages: imageArray => dispatch(setPortfolioImages(imageArray))
+  setImagesDownloading: isDownloading => dispatch(setImagesDownloading(isDownloading))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

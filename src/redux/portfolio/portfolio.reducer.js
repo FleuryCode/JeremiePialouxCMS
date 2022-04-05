@@ -4,6 +4,7 @@ const INITIAL_STATE = {
     portfolioData: [],
     portfolioImages: [],
     isDownloading: true,
+    addedImages: 0
 };
 
 const portfolioReducer = (state = INITIAL_STATE, action) => {
@@ -22,6 +23,11 @@ const portfolioReducer = (state = INITIAL_STATE, action) => {
             return {
                 ...state,
                 isDownloading: action.payload
+            };
+        case PortfolioTypes.SET_ADDED_IMAGES:
+            return {
+                ...state,
+                addedImages: action.payload
             };
         default:
             return state;

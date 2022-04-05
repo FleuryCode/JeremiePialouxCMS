@@ -14,3 +14,8 @@ export const setImagesDownloading = (isDownloading) => ({
     type: PortfolioTypes.SET_IS_DOWNLOADING,
     payload: isDownloading
 });
+
+export const setAddedImages = (addedImages) => ({
+    type: PortfolioTypes.SET_ADDED_IMAGES,
+    payload: addedImages
+});

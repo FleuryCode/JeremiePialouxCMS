@@ -3,12 +3,13 @@ import './addImageButton.styles.scss';
 import PlusIcon from '../../assets/plusSignIcon.svg';
 // Redux
 import { connect } from "react-redux";
+import { setAddedImages } from "../../redux/portfolio/portfolio.actions";
 // Firebase
 import { db, storage } from "../../firebase/firebase.utils";
 import { ref, uploadBytes } from "firebase/storage";
-import { doc, setDoc, updateDoc } from "firebase/firestore";
+import { doc, setDoc } from "firebase/firestore";
 
-const AddImageButton = ({ portfolioData }) => {
+const AddImageButton = ({ portfolioData, addedImages, setAddedImages }) => {
     const hiddenFileInput = React.useRef(null);
     const [imagesUploading, setImagesUploading] = useState(false);
 
@@ -31,11 +32,11 @@ const AddImageButton = ({ portfolioData }) => {
                 const storageRef = ref(storage, `Portfolio/${fileArray[i].name}`);
                 // Upload to Storage
                 await uploadBytes(storageRef, fileArray[i], metadata)
-                    .then((snapshot) => {
+                    .then(async (snapshot) => {
                         idVariable++;
                         
                         console.log('Storage Done')
-                        setDoc(doc(db, 'Portfolio', `${fileArray[i].name}`), {
+                        await setDoc(doc(db, 'Portfolio', `${fileArray[i].name}`), {
                             id: idVariable,
                             key: `${idVariable}`,
                             imageName: fileArray[i].name,
@@ -50,7 +51,8 @@ const AddImageButton = ({ portfolioData }) => {
                             realHeight: '',
                             realWidth: '',
                             src: ''
-                        });    
+                        });
+                    
 
                     })
                     .catch((error) => {
@@ -60,9 +62,11 @@ const AddImageButton = ({ portfolioData }) => {
             }
             // Waits until loop is done
             console.log('Loop is complete');
-            console.log('Huzzah!');
+            document.getElementById('addImages').value = null;
+            setAddedImages(addedImages + 1);
             setImagesUploading(false);
-            // Look into adding another redux isUploading/Downloading field to add empty loading boxes. More UX friendly.
+            
+            
         }
     }
     return (
@@ -92,7 +96,12 @@ const AddImageButton = ({ portfolioData }) => {
 }
 
 const mapStateToProps = (state) => ({
-    portfolioData: state.portfolio.portfolioData
+    portfolioData: state.portfolio.portfolioData,
+    addedImages: state.portfolio.addedImages
 });
 
-export default connect(mapStateToProps)(AddImageButton);
+const mapDispatchToProps = (dispatch) => ({
+    setAddedImages: images => dispatch(setAddedImages(images))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(AddImageButton);

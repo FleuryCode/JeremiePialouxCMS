@@ -10,10 +10,10 @@ import { db } from '../../firebase/firebase.utils';
 import { connect } from "react-redux";
 import { setPortfolioData } from "../../redux/portfolio/portfolio.actions";
 
-const IndividualImage = ({ data, index, setPortfolioData, deleteClick }) => {
+const IndividualImage = ({ data, index, setPortfolioData, deleteClick, isDeleting }) => {
     // console.log(data.images[index]);
     const pickedImage = data[index];
-    
+
 
     // Might need to redux selected index
     const [title, setTitle] = useState(pickedImage.title);
@@ -31,7 +31,7 @@ const IndividualImage = ({ data, index, setPortfolioData, deleteClick }) => {
         setHeight(pickedImage.realHeight);
         setWidth(pickedImage.realWidth);
         setTechnique(pickedImage.technique);
-    },[index])
+    }, [index])
 
     // On Change
     const onInputChange = (event) => {
@@ -88,7 +88,7 @@ const IndividualImage = ({ data, index, setPortfolioData, deleteClick }) => {
 
     // Delete Button
     // const deleteButtonHandle = () => {
-        
+
     //     setUpdating(true);
     //     // await deleteDoc(doc(db, `${pickedImage.imageName}`));
     //     console.log('Done Deleting')
@@ -97,6 +97,7 @@ const IndividualImage = ({ data, index, setPortfolioData, deleteClick }) => {
     //     setPortfolioData(data);
     //     setUpdating(false);
     // }
+
 
     return (
         <div className="individualImageContainer">
@@ -126,7 +127,15 @@ const IndividualImage = ({ data, index, setPortfolioData, deleteClick }) => {
                     <CustomTextBox id={'description'} name={'description'} value={description} onChange={onInputChange} placeholder={'Description'} />
                     <div className="dataSaveButton">
                         <div onClick={() => deleteClick(data, index)} className="deleteButtonContainer me-auto ms-5">
-                            <DeleteIcon />
+                            {
+                                isDeleting ?
+                                    <div className="spinner-border" role="status">
+                                        <span className="visually-hidden">Loading...</span>
+                                    </div>
+                                    :
+                                    <DeleteIcon />
+                            }
+
                         </div>
                         <div className={`${updating ? 'd-flex' : 'd-none'} spinner-border`} role="status">
                             <span className="visually-hidden">Loading...</span>
