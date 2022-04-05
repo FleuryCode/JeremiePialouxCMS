@@ -4,7 +4,7 @@ const INITIAL_STATE = {
     portfolioData: [],
     portfolioImages: [],
     isDownloading: true,
-    canDownload: true
+    addedImages: 0
 };
 
 const portfolioReducer = (state = INITIAL_STATE, action) => {
@@ -24,10 +24,10 @@ const portfolioReducer = (state = INITIAL_STATE, action) => {
                 ...state,
                 isDownloading: action.payload
             };
-        case PortfolioTypes.SET_CAN_DOWNLOAD:
+        case PortfolioTypes.SET_ADDED_IMAGES:
             return {
                 ...state,
-                canDownload: action.payload
+                addedImages: action.payload
             };
         default:
             return state;

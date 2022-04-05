@@ -4,15 +4,16 @@ import PortfolioImage from "../portfolioImage/portfolioImage.component";
 import AddImageButton from "../addImageButton/addImageButton.component";
 // Redux
 import { connect } from "react-redux";
-import { setCanDownload } from '../../redux/portfolio/portfolio.actions';
+import { setPortfolioData } from "../../redux/portfolio/portfolio.actions";
 // Sorting
 import Gallery from "react-photo-gallery";
 import { arrayMoveImmutable } from "array-move";
 import { SortableContainer, SortableElement } from "react-sortable-hoc";
 // Firebase
-import { db } from "../../firebase/firebase.utils";
-import { doc, updateDoc } from "firebase/firestore";
+import { db, storage } from "../../firebase/firebase.utils";
+import { doc, updateDoc, deleteDoc } from "firebase/firestore";
 import IndividualImage from "../individualImage/individualImage.component";
+import { deleteObject, ref } from "firebase/storage";
 
 
 const SortablePhoto = SortableElement(item => <PortfolioImage {...item} />);
@@ -20,14 +21,15 @@ export const SortableGallery = SortableContainer(({ items }) => (
     <Gallery photos={items} renderImage={props => <SortablePhoto {...props} />} />
 ));
 
-const HomeSection = ({ data, images, isDownloading, setCanDownload }) => {
+const HomeSection = ({ data, addedImages, isDownloading, setPortfolioData }) => {
     const [items, setItems] = useState({});
     const [changed, setChanged] = useState(false);
     const [activeIndex, setActiveIndex] = useState(0);
+    const [deleting, setDeleting] = useState(false);
 
     useEffect(() => {
         setItems(data);
-    }, [images]);
+    }, [data]);
 
     const onSortEnd = ({ oldIndex, newIndex }) => {
         setItems(arrayMoveImmutable(items, oldIndex, newIndex));
@@ -35,25 +37,43 @@ const HomeSection = ({ data, images, isDownloading, setCanDownload }) => {
     };
 
     const onSaveOrderClick = async () => {
-        // Try getting rid of loop and using KEYS of ones changed to update.
-        setCanDownload(false);
         for (let i = 0; i < items.length; i++) {
+            items[i].id = (i + 1);
+            items[i].key = `${i + 1}`;
             const docRef = doc(db, 'Portfolio', `${items[i].imageName}`);
             await updateDoc(docRef, {
                 id: (i + 1),
                 key: `${i + 1}`
             });
-
         }
+
+        setPortfolioData(items);
         setChanged(false);
-        setCanDownload(true);
-        console.log('Loop done?');
-        // Works but clunky. It is getting the data right away. Make a redux variable to change and draw data.
+
     }
 
-    const handleSelectorClick = (index, specificImage) => {
+    const handleSelectorClick = (index) => {
         setActiveIndex(index);
     };
+
+    // Delete Button Click Not sure this is going to work.
+    const handleDelete = async (data, index) => {
+        const imageRef = ref(storage, `Portfolio/${data[index].imageName}`);
+        setDeleting(true);
+
+        await deleteDoc(doc(db, 'Portfolio', `${data[index].imageName}`));
+        deleteObject(imageRef)
+            .then(async () => {
+                console.log('Image Deleted')
+                data.splice(index, 1);
+                await setPortfolioData(data);
+                setActiveIndex(0);
+                setDeleting(false);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }
 
     return (
         <div className="homeSectionContainer">
@@ -77,7 +97,7 @@ const HomeSection = ({ data, images, isDownloading, setCanDownload }) => {
                 }
             </div>
             <div className="individualImageComponentContainer">
-                <IndividualImage data={data} index={activeIndex} />
+                <IndividualImage data={data} index={activeIndex} deleteClick={handleDelete} isDeleting={deleting} />
             </div>
         </div>
     );
@@ -85,12 +105,12 @@ const HomeSection = ({ data, images, isDownloading, setCanDownload }) => {
 
 const mapStateToProps = (state) => ({
     data: state.portfolio.portfolioData,
-    images: state.portfolio.portfolioImages,
-    isDownloading: state.portfolio.isDownloading
+    isDownloading: state.portfolio.isDownloading,
+    addedImages: state.portfolio.addedImages
 });
 
 const mapDispatchToProps = (dispatch) => ({
-    setCanDownload: canDownload => dispatch(setCanDownload(canDownload))
+    setPortfolioData: data => dispatch(setPortfolioData(data))
 });
 
 
