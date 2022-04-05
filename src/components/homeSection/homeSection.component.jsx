@@ -10,9 +10,10 @@ import Gallery from "react-photo-gallery";
 import { arrayMoveImmutable } from "array-move";
 import { SortableContainer, SortableElement } from "react-sortable-hoc";
 // Firebase
-import { db } from "../../firebase/firebase.utils";
-import { doc, updateDoc } from "firebase/firestore";
+import { db, storage } from "../../firebase/firebase.utils";
+import { doc, updateDoc, deleteDoc } from "firebase/firestore";
 import IndividualImage from "../individualImage/individualImage.component";
+import { deleteObject, ref } from "firebase/storage";
 
 
 const SortablePhoto = SortableElement(item => <PortfolioImage {...item} />);
@@ -45,7 +46,7 @@ const HomeSection = ({ data, images, isDownloading, setPortfolioData }) => {
                 key: `${i + 1}`
             });
         }
-        
+
         setPortfolioData(items);
         setChanged(false);
 
@@ -57,12 +58,21 @@ const HomeSection = ({ data, images, isDownloading, setPortfolioData }) => {
 
     // Delete Button Click Not sure this is going to work.
     const handleDelete = async (data, index) => {
+        const imageRef = ref(storage, `Portfolio/${data[index].imageName}`);
         setDeleting(true);
-        data.splice(index, 1);
-        console.log(data);
-        await setPortfolioData(data);
-        setActiveIndex(0);
-        setDeleting(false);
+
+        await deleteDoc(doc(db, 'Portfolio', `${data[index].imageName}`));
+        deleteObject(imageRef)
+            .then(async () => {
+                console.log('Image Deleted')
+                data.splice(index, 1);
+                await setPortfolioData(data);
+                setActiveIndex(0);
+                setDeleting(false);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
     }
 
     return (
