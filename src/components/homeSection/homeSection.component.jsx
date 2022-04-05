@@ -24,6 +24,7 @@ export const SortableGallery = SortableContainer(({ items }) => (
 const HomeSection = ({ data, addedImages, isDownloading, setPortfolioData }) => {
     const [items, setItems] = useState({});
     const [changed, setChanged] = useState(false);
+    // Add Save Changes for Spinner
     const [activeIndex, setActiveIndex] = useState(0);
     const [deleting, setDeleting] = useState(false);
 
@@ -37,6 +38,7 @@ const HomeSection = ({ data, addedImages, isDownloading, setPortfolioData }) => 
     };
 
     const onSaveOrderClick = async () => {
+
         for (let i = 0; i < items.length; i++) {
             items[i].id = (i + 1);
             items[i].key = `${i + 1}`;

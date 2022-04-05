@@ -86,19 +86,6 @@ const IndividualImage = ({ data, index, setPortfolioData, deleteClick, isDeletin
         setUpdating(false);
     }
 
-    // Delete Button
-    // const deleteButtonHandle = () => {
-
-    //     setUpdating(true);
-    //     // await deleteDoc(doc(db, `${pickedImage.imageName}`));
-    //     console.log('Done Deleting')
-    //     data.splice(index, 1);
-    //     console.log(data);
-    //     setPortfolioData(data);
-    //     setUpdating(false);
-    // }
-
-
     return (
         <div className="individualImageContainer">
             <div className="heroImageContainer">
