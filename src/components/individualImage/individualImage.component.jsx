@@ -10,7 +10,7 @@ import { db } from '../../firebase/firebase.utils';
 import { connect } from "react-redux";
 import { setPortfolioData } from "../../redux/portfolio/portfolio.actions";
 
-const IndividualImage = ({ data, index, setPortfolioData }) => {
+const IndividualImage = ({ data, index, setPortfolioData, deleteClick }) => {
     // console.log(data.images[index]);
     const pickedImage = data[index];
     
@@ -87,16 +87,16 @@ const IndividualImage = ({ data, index, setPortfolioData }) => {
     }
 
     // Delete Button
-    const deleteButtonHandle = () => {
+    // const deleteButtonHandle = () => {
         
-        setUpdating(true);
-        // await deleteDoc(doc(db, `${pickedImage.imageName}`));
-        console.log('Done Deleting')
-        data.splice(index, 1);
-        console.log(data);
-        setPortfolioData(data);
-        setUpdating(false);
-    }
+    //     setUpdating(true);
+    //     // await deleteDoc(doc(db, `${pickedImage.imageName}`));
+    //     console.log('Done Deleting')
+    //     data.splice(index, 1);
+    //     console.log(data);
+    //     setPortfolioData(data);
+    //     setUpdating(false);
+    // }
 
     return (
         <div className="individualImageContainer">
@@ -125,7 +125,7 @@ const IndividualImage = ({ data, index, setPortfolioData }) => {
                     <label className="inputLabel" htmlFor="description">Description</label>
                     <CustomTextBox id={'description'} name={'description'} value={description} onChange={onInputChange} placeholder={'Description'} />
                     <div className="dataSaveButton">
-                        <div onClick={deleteButtonHandle} className="deleteButtonContainer me-auto ms-5">
+                        <div onClick={() => deleteClick(data, index)} className="deleteButtonContainer me-auto ms-5">
                             <DeleteIcon />
                         </div>
                         <div className={`${updating ? 'd-flex' : 'd-none'} spinner-border`} role="status">

@@ -24,6 +24,7 @@ const HomeSection = ({ data, images, isDownloading, setPortfolioData }) => {
     const [items, setItems] = useState({});
     const [changed, setChanged] = useState(false);
     const [activeIndex, setActiveIndex] = useState(0);
+    const [deleting, setDeleting] = useState(false);
 
     useEffect(() => {
         setItems(data);
@@ -54,6 +55,15 @@ const HomeSection = ({ data, images, isDownloading, setPortfolioData }) => {
         setActiveIndex(index);
     };
 
+    // Delete Button Click Not sure this is going to work.
+    const handleDelete = (data, index) => {
+        setDeleting(true);
+        data.splice(index, 1);
+        console.log(data);
+        setPortfolioData(data);
+        setDeleting(false);
+    }
+
     return (
         <div className="homeSectionContainer">
             <div className="buttonContainer">
@@ -76,7 +86,7 @@ const HomeSection = ({ data, images, isDownloading, setPortfolioData }) => {
                 }
             </div>
             <div className="individualImageComponentContainer">
-                <IndividualImage data={data} index={activeIndex} />
+                <IndividualImage data={data} index={activeIndex} deleteClick={handleDelete} />
             </div>
         </div>
     );
