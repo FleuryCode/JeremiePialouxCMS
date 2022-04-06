@@ -1,9 +1,7 @@
 import { TextTypes } from "./text.types";
 
 const INITIAL_STATE = {
-    textData: [
-        
-    ]
+    textData: {}
 };
 
 const textReducer = (state = INITIAL_STATE, action) => {
