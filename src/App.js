@@ -6,18 +6,31 @@ import Homepage from './pages/homepage/homePage.page';
 // Redux
 import { connect } from 'react-redux';
 import { setPortfolioData, setImagesDownloading } from './redux/portfolio/portfolio.actions';
+import { setTextData } from './redux/text/text.acions';
 // Firebase
 import firebaseApp, { db, storage } from './firebase/firebase.utils';
-import { collection, doc, getDocs, onSnapshot, query } from "firebase/firestore";
+import { collection, doc, getDoc, getDocs, onSnapshot, query } from "firebase/firestore";
 import { getDownloadURL, ref } from 'firebase/storage';
 
 
 
-function App({ loggedIn, setPortfolioData, setImagesDownloading, addedImages }) {
+function App({ loggedIn, setPortfolioData, setImagesDownloading, addedImages, setTextData }) {
   const [testData, setTestData] = useState(true);
 
-  
+  // Text Data
+  const getTextData = async () => {
+    const textDocRef = doc(db, 'Text', 'textData');
+    const textDocSnap = await getDoc(textDocRef);
 
+    if(textDocSnap.exists) {
+      setTextData(textDocSnap.data());
+    }else {
+      console.log('Data does not exist.');
+    };
+
+  }
+
+  // Portfolio Image Data
   const getData = async () => {
     let dataArray = [];
     const querySnapshot = await getDocs(collection(db, 'Portfolio'));
@@ -47,6 +60,10 @@ function App({ loggedIn, setPortfolioData, setImagesDownloading, addedImages }) 
     console.log('Working');
   }, [addedImages]);
 
+  useEffect(() => {
+    getTextData();
+  }, []);
+
 
 
   const devVar = true;
@@ -65,7 +82,9 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   setPortfolioData: data => dispatch(setPortfolioData(data)),
-  setImagesDownloading: isDownloading => dispatch(setImagesDownloading(isDownloading))
+  setImagesDownloading: isDownloading => dispatch(setImagesDownloading(isDownloading)),
+  setTextData: textData => dispatch(setTextData(textData))
+
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

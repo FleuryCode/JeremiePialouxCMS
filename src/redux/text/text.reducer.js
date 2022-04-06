@@ -1,21 +1,17 @@
 import { TextTypes } from "./text.types";
 
 const INITIAL_STATE = {
-    aboutText: 'Fill this out',
-    homeText: 'Fill this out too'
+    textData: [
+        
+    ]
 };
 
 const textReducer = (state = INITIAL_STATE, action) => {
     switch (action.type) {
-        case TextTypes.SET_ABOUT_TEXT:
+        case TextTypes.SET_TEXT_DATA:
             return {
                 ...state,
-                aboutText: action.payload
-            };
-        case TextTypes.SET_HOME_TEXT:
-            return {
-                ...state,
-                homeText: action.payload
+                textData: action.payload
             };
         default:
             return state;
