@@ -2,20 +2,21 @@ import React, { useEffect, useState } from "react";
 import './individualImage.styles.scss';
 import CustomInput from "../customInput/customInput.component";
 import CustomTextBox from "../customTextBox/customTextBox.component";
+import CustomButton from '../customButton/customButton.component'
 import { ReactComponent as DeleteIcon } from '../../assets/deleteIcon.svg';
 // Firebase
-import { doc, updateDoc, deleteDoc } from "firebase/firestore";
-import { db } from '../../firebase/firebase.utils';
+import { doc, updateDoc } from "firebase/firestore";
+import { ref } from "firebase/storage";
+import { db, storage } from '../../firebase/firebase.utils';
 // Redux
 import { connect } from "react-redux";
 import { setPortfolioData } from "../../redux/portfolio/portfolio.actions";
+import { uploadBytes } from "firebase/storage";
 
 const IndividualImage = ({ data, index, setPortfolioData, deleteClick, isDeleting }) => {
-    // console.log(data.images[index]);
+
     const pickedImage = data[index];
 
-
-    // Might need to redux selected index
     const [title, setTitle] = useState(pickedImage.title);
     const [description, setDescription] = useState(pickedImage.description);
     const [creationDate, setCreationDate] = useState(pickedImage.creationDate);
@@ -23,6 +24,7 @@ const IndividualImage = ({ data, index, setPortfolioData, deleteClick, isDeletin
     const [width, setWidth] = useState(pickedImage.realWidth);
     const [technique, setTechnique] = useState(pickedImage.technique);
     const [updating, setUpdating] = useState(false);
+    const [addingImages, setAddingImages] = useState(false);
 
     useEffect(() => {
         setTitle(pickedImage.title);
@@ -84,12 +86,61 @@ const IndividualImage = ({ data, index, setPortfolioData, deleteClick, isDeletin
         data[index].link = title.replace(/\.[^/.]+$/, "").toLowerCase().replace(/ /g, '');
         setPortfolioData(data);
         setUpdating(false);
-    }
+    };
+
+    // Adding Extra Images
+    const hiddenFileRef = React.useRef(null);
+
+    const addExtraImagesClick = () => {
+        hiddenFileRef.current.click();
+    };
+
+    const multiExtraAdd = async (event) => {
+        setAddingImages(true);
+        const docRef = doc(db, 'Portfolio', `${pickedImage.imageName}`);
+        if (event.target.files && event.target.files[0]) {
+            const fileArray = event.target.files;
+
+            for (let i = 0; i < fileArray.length; i++) {
+                const metadata = {
+                    contentType: fileArray[i].type
+                };
+                const storageRef = ref(storage, `Portfolio/${fileArray[i].name}`);
+                await uploadBytes(storageRef, fileArray[i], metadata)
+                .then(async(snapshot) => {
+                    let updatedArray = pickedImage.otherImages;
+                    updatedArray.push(`${fileArray[i].name}`);
+                    await updateDoc(docRef, {
+                        otherImages: updatedArray
+                    });
+
+                })
+                .catch((error) => {
+                    console.log(error)
+                });
+                
+            };
+            // After Loop
+            setAddingImages(false);
+            console.log('Finished Adding Images', pickedImage.otherImages);
+        };
+    };
+
 
     return (
         <div className="individualImageContainer">
             <div className="heroImageContainer">
-                <img src={pickedImage.src} alt="" />
+                <img className="mb-3" src={pickedImage.src} alt="" />
+                <input
+                onChange={multiExtraAdd}
+                type="file"
+                id="addExtraImages"
+                accept="image/*"
+                multiple="multiple"
+                style={{display: 'none'}}
+                ref={hiddenFileRef}
+                />
+                <CustomButton handleClick={addExtraImagesClick} text={'Ajouter Images'} />
             </div>
             <div className="individualImageInfoContainer">
                 <h4>{title}</h4>
