@@ -6,14 +6,14 @@ import CustomButton from '../customButton/customButton.component'
 import { ReactComponent as DeleteIcon } from '../../assets/deleteIcon.svg';
 // Firebase
 import { doc, updateDoc } from "firebase/firestore";
-import { ref } from "firebase/storage";
+import { getDownloadURL, ref } from "firebase/storage";
 import { db, storage } from '../../firebase/firebase.utils';
 // Redux
 import { connect } from "react-redux";
-import { setPortfolioData } from "../../redux/portfolio/portfolio.actions";
+import { setPortfolioData, setAddedImages } from "../../redux/portfolio/portfolio.actions";
 import { uploadBytes } from "firebase/storage";
 
-const IndividualImage = ({ data, index, setPortfolioData, deleteClick, isDeleting }) => {
+const IndividualImage = ({ data, index, setPortfolioData, deleteClick, isDeleting, addedImages, setAddedImages }) => {
 
     const pickedImage = data[index];
 
@@ -25,6 +25,23 @@ const IndividualImage = ({ data, index, setPortfolioData, deleteClick, isDeletin
     const [technique, setTechnique] = useState(pickedImage.technique);
     const [updating, setUpdating] = useState(false);
     const [addingImages, setAddingImages] = useState(false);
+    const [addedUrls, setAddedUrls] = useState([]);
+
+    const downloadAdditionalImages = async () => {
+        setAddingImages(true);
+        let addedImageUrls = [];
+        for (let j = 0; j < pickedImage.otherImages.length; j++) {
+            await getDownloadURL(ref(storage, `Portfolio/${pickedImage.otherImages[j]}`))
+            .then((url) => {
+                addedImageUrls.push(url);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+        };
+        setAddedUrls(addedImageUrls);
+        setAddingImages(false);
+    };
 
     useEffect(() => {
         setTitle(pickedImage.title);
@@ -33,7 +50,12 @@ const IndividualImage = ({ data, index, setPortfolioData, deleteClick, isDeletin
         setHeight(pickedImage.realHeight);
         setWidth(pickedImage.realWidth);
         setTechnique(pickedImage.technique);
-    }, [index])
+        downloadAdditionalImages();
+    }, [index]);
+
+    useEffect(() => {
+        downloadAdditionalImages();
+    }, [addedImages]);
 
     // On Change
     const onInputChange = (event) => {
@@ -121,12 +143,12 @@ const IndividualImage = ({ data, index, setPortfolioData, deleteClick, isDeletin
                 
             };
             // After Loop
+            setAddedImages(addedImages + 1);
             setAddingImages(false);
-            console.log('Finished Adding Images', pickedImage.otherImages);
         };
     };
-
-
+    
+    // Need to add a addedImages delete function eventually too.
     return (
         <div className="individualImageContainer">
             <div className="heroImageContainer">
@@ -140,7 +162,16 @@ const IndividualImage = ({ data, index, setPortfolioData, deleteClick, isDeletin
                 style={{display: 'none'}}
                 ref={hiddenFileRef}
                 />
-                <CustomButton handleClick={addExtraImagesClick} text={'Ajouter Images'} />
+                <CustomButton handleClick={addExtraImagesClick} text={'Ajouter Images'} loading={addingImages} />
+                <div className="addedImagesContainer">
+                    {
+                        addedUrls.map((image, index) => (
+                            <div key={index} className="addedImageSpecific">
+                                <img src={image} alt="Jeremie Artist" />
+                            </div>
+                        ))
+                    }
+                </div>
             </div>
             <div className="individualImageInfoContainer">
                 <h4>{title}</h4>
@@ -186,8 +217,14 @@ const IndividualImage = ({ data, index, setPortfolioData, deleteClick, isDeletin
     );
 }
 
-const mapDispatchToProps = (dispatch) => ({
-    setPortfolioData: data => dispatch(setPortfolioData(data))
+const mapStateToProps = (state) => ({
+    addedImages: state.portfolio.addedImages
 });
 
-export default connect(null, mapDispatchToProps)(IndividualImage);
+const mapDispatchToProps = (dispatch) => ({
+    setPortfolioData: data => dispatch(setPortfolioData(data)),
+    setAddedImages: number => dispatch(setAddedImages(number))
+
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(IndividualImage);

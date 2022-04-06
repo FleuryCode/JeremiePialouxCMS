@@ -12,6 +12,26 @@
             width: 100%;
             object-fit: cover;
         }
+
+        .addedImagesContainer {
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-start;
+            flex-wrap: wrap;
+            margin-top: 20px;
+
+            .addedImageSpecific {
+                width: 80px;
+                height: 80px;
+                margin: 0 8px;
+                img {
+                    height: 100%;
+                    width: 100%;
+                    object-fit: cover;
+                    object-position: center;
+                }
+            }
+        }
     }
 
     .individualImageInfoContainer {
