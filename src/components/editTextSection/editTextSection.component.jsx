@@ -10,6 +10,7 @@ const EditTextSection = (textData) => {
     // const textKeys = Object.keys(mainTextData);
     // console.log(textKeys);
     const [aboutInfo, setAboutInfo] = useState('This Information Needs To Be Updated');
+    const [homeInfo, setHomeInfo] = useState('This Information Needs To Be Updated Too');
 
     // Handling Text Box Change
     const onChangeHandle = (event) => {
@@ -19,7 +20,9 @@ const EditTextSection = (textData) => {
             case 'aboutInfo':
                 setAboutInfo(value);
                 break;
-
+            case 'homeInfo':
+                setHomeInfo(value);
+                break;
             default:
                 break;
         }
@@ -28,6 +31,7 @@ const EditTextSection = (textData) => {
         <div className="editTextSectionContainer">
             <h1>Edit Text Section</h1>
             <TextEditModule id={'aboutInfo'} name={'aboutInfo'} value={aboutInfo} placeholder={'About Information'} displayName={'About Info'} onChangeHandle={onChangeHandle} />
+            <TextEditModule id={'homeInfo'} name={'homeInfo'} value={homeInfo} placeholder={'Home Information'} displayName={'Home Info'} onChangeHandle={onChangeHandle} />
         </div>
     );
 }
