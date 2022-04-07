@@ -3,10 +3,7 @@ import CustomButton from "../customButton/customButton.component";
 import CustomTextBox from "../customTextBox/customTextBox.component";
 import './textEditModule.styles.scss';
 
-const TextEditModule = ({ id, name, value, placeholder, dbName, displayName }) => {
-    const onChangeHandle = () => {
-        console.log('Hey');
-    };
+const TextEditModule = ({ id, name, value, placeholder, displayName, onChangeHandle }) => {
     return (
         <div className="textEditModuleContainer container-fluid">
             <div className="row">
@@ -14,7 +11,7 @@ const TextEditModule = ({ id, name, value, placeholder, dbName, displayName }) =
                     <label htmlFor="aboutInfo"><h5>{displayName}</h5></label>
                 </div>
                 <div className="col-12">
-                    <CustomTextBox />
+                    <CustomTextBox id={id} name={name} value={value} placeholder={placeholder} onChange={onChangeHandle} />
                 </div>
                 <div className="col-5">
                     <CustomButton text={`Update ${displayName}`} />
