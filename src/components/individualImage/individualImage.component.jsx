@@ -27,17 +27,19 @@ const IndividualImage = ({ data, index, setPortfolioData, deleteClick, isDeletin
     const [addingImages, setAddingImages] = useState(false);
     const [addedUrls, setAddedUrls] = useState([]);
 
+    const [indexHover, setIndexHover] = useState(null);
+
     const downloadAdditionalImages = async () => {
         setAddingImages(true);
         let addedImageUrls = [];
         for (let j = 0; j < pickedImage.otherImages.length; j++) {
             await getDownloadURL(ref(storage, `Portfolio/${pickedImage.otherImages[j]}`))
-            .then((url) => {
-                addedImageUrls.push(url);
-            })
-            .catch((error) => {
-                console.log(error);
-            });
+                .then((url) => {
+                    addedImageUrls.push(url);
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
         };
         setAddedUrls(addedImageUrls);
         setAddingImages(false);
@@ -129,45 +131,58 @@ const IndividualImage = ({ data, index, setPortfolioData, deleteClick, isDeletin
                 };
                 const storageRef = ref(storage, `Portfolio/${fileArray[i].name}`);
                 await uploadBytes(storageRef, fileArray[i], metadata)
-                .then(async(snapshot) => {
-                    let updatedArray = pickedImage.otherImages;
-                    updatedArray.push(`${fileArray[i].name}`);
-                    await updateDoc(docRef, {
-                        otherImages: updatedArray
+                    .then(async (snapshot) => {
+                        let updatedArray = pickedImage.otherImages;
+                        updatedArray.push(`${fileArray[i].name}`);
+                        await updateDoc(docRef, {
+                            otherImages: updatedArray
+                        });
+
+                    })
+                    .catch((error) => {
+                        console.log(error)
                     });
 
-                })
-                .catch((error) => {
-                    console.log(error)
-                });
-                
             };
             // After Loop
             setAddedImages(addedImages + 1);
             setAddingImages(false);
         };
     };
-    
+
     // Need to add a addedImages delete function eventually too.
     return (
         <div className="individualImageContainer">
             <div className="heroImageContainer">
                 <img className="mb-3" src={pickedImage.src} alt="" />
                 <input
-                onChange={multiExtraAdd}
-                type="file"
-                id="addExtraImages"
-                accept="image/*"
-                multiple="multiple"
-                style={{display: 'none'}}
-                ref={hiddenFileRef}
+                    onChange={multiExtraAdd}
+                    type="file"
+                    id="addExtraImages"
+                    accept="image/*"
+                    multiple="multiple"
+                    style={{ display: 'none' }}
+                    ref={hiddenFileRef}
                 />
                 <CustomButton handleClick={addExtraImagesClick} text={'Ajouter Images'} loading={addingImages} />
                 <div className="addedImagesContainer">
                     {
                         addedUrls.map((image, index) => (
-                            <div key={index} className="addedImageSpecific">
-                                <img src={image} alt="Jeremie Artist" />
+                            <div key={index} className="addedImageSpecific"
+                                onMouseEnter={() => setIndexHover(index)}
+                                onMouseLeave={() => setIndexHover(null)}
+                            >
+                                {
+                                    (indexHover === index) ?
+                                        <div className="deleteSpecificImageContainer">
+                                            <DeleteIcon />
+                                        </div>
+                                        :
+                                        <img src={image} alt="Jeremie Artist" />
+                                }
+
+
+
                             </div>
                         ))
                     }
