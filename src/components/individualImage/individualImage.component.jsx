@@ -6,7 +6,7 @@ import CustomButton from '../customButton/customButton.component'
 import { ReactComponent as DeleteIcon } from '../../assets/deleteIcon.svg';
 // Firebase
 import { doc, updateDoc } from "firebase/firestore";
-import { getDownloadURL, ref } from "firebase/storage";
+import { deleteObject, getDownloadURL, ref } from "firebase/storage";
 import { db, storage } from '../../firebase/firebase.utils';
 // Redux
 import { connect } from "react-redux";
@@ -26,7 +26,6 @@ const IndividualImage = ({ data, index, setPortfolioData, deleteClick, isDeletin
     const [updating, setUpdating] = useState(false);
     const [addingImages, setAddingImages] = useState(false);
     const [addedUrls, setAddedUrls] = useState([]);
-
     const [indexHover, setIndexHover] = useState(null);
 
     const downloadAdditionalImages = async () => {
@@ -150,6 +149,30 @@ const IndividualImage = ({ data, index, setPortfolioData, deleteClick, isDeletin
         };
     };
 
+    // Delete Added Image
+    const deleteAddedImage = async (hoverIndex) => {
+        console.log(pickedImage.otherImages[hoverIndex]);
+        const docRef = doc(db, 'Portfolio', `${pickedImage.imageName}`);
+        const storageRef = ref(storage, `Portfolio/${pickedImage.otherImages[hoverIndex]}`);
+        setAddedImages(true);
+        data[index].otherImages.splice(hoverIndex, 1);
+        const updatedArray = pickedImage.otherImages;
+
+        await updateDoc(docRef, {
+            otherImages: updatedArray
+        });
+
+        deleteObject(storageRef)
+        .then(() => {
+            setPortfolioData(data);
+            setAddedImages(addedImages + 1);
+            setAddingImages(false);
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+    };
+
     // Need to add a addedImages delete function eventually too.
     return (
         <div className="individualImageContainer">
@@ -174,7 +197,7 @@ const IndividualImage = ({ data, index, setPortfolioData, deleteClick, isDeletin
                             >
                                 {
                                     (indexHover === index) ?
-                                        <div className="deleteSpecificImageContainer">
+                                        <div onClick={() => deleteAddedImage(index)} className="deleteSpecificImageContainer">
                                             <DeleteIcon />
                                         </div>
                                         :
