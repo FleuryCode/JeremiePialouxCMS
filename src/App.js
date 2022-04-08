@@ -6,7 +6,7 @@ import Homepage from './pages/homepage/homePage.page';
 // Redux
 import { connect } from 'react-redux';
 import { setPortfolioData, setImagesDownloading } from './redux/portfolio/portfolio.actions';
-import { setTextData } from './redux/text/text.acions';
+import { setTextData } from './redux/text/text.actions';
 // Firebase
 import firebaseApp, { db, storage } from './firebase/firebase.utils';
 import { collection, doc, getDoc, getDocs, onSnapshot, query } from "firebase/firestore";
@@ -23,7 +23,9 @@ function App({ loggedIn, setPortfolioData, setImagesDownloading, addedImages, se
     const textDocSnap = await getDoc(textDocRef);
 
     if(textDocSnap.exists) {
-      setTextData(textDocSnap.data());
+      console.log(textDocSnap.data());
+      const uploadData = textDocSnap.data();
+      setTextData(uploadData);
     }else {
       console.log('Data does not exist.');
     };
@@ -83,7 +85,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   setPortfolioData: data => dispatch(setPortfolioData(data)),
   setImagesDownloading: isDownloading => dispatch(setImagesDownloading(isDownloading)),
-  setTextData: textData => dispatch(setTextData(textData))
+  setTextData: textInfo => dispatch(setTextData(textInfo))
 
 });
 

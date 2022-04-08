@@ -1,14 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import './editTextSection.styles.scss';
 // Redux
 import { connect } from "react-redux";
 import TextEditModule from "../textEditModule/textEditModule.component";
 
 
-const EditTextSection = (textData) => {
-    const mainTextData = textData.textData;
-    // const textKeys = Object.keys(mainTextData);
-    // console.log(textKeys);
+const EditTextSection = ({ textData }) => {
+
     const [aboutInfo, setAboutInfo] = useState('This Information Needs To Be Updated');
     const [homeInfo, setHomeInfo] = useState('This Information Needs To Be Updated Too');
 
@@ -27,11 +25,22 @@ const EditTextSection = (textData) => {
                 break;
         }
     }
+
+    useEffect(() => {
+        setAboutInfo(textData.aboutInfo);
+        setHomeInfo(textData.homeInfo);
+    }, []);
+
     return (
         <div className="editTextSectionContainer">
-            <h1>Edit Text Section</h1>
-            <TextEditModule id={'aboutInfo'} name={'aboutInfo'} value={aboutInfo} placeholder={'About Information'} displayName={'About Info'} onChangeHandle={onChangeHandle} />
-            <TextEditModule id={'homeInfo'} name={'homeInfo'} value={homeInfo} placeholder={'Home Information'} displayName={'Home Info'} onChangeHandle={onChangeHandle} />
+            <h1 className="mb-3">Edit Text Section</h1>
+            <div className="moduleContainer mb-5">
+                <TextEditModule id={'aboutInfo'} name={'aboutInfo'} value={aboutInfo} placeholder={'About Information'} displayName={'About Info'} onChangeHandle={onChangeHandle} />
+            </div>
+            <div className="moduleContainer mb-5">
+                <TextEditModule id={'homeInfo'} name={'homeInfo'} value={homeInfo} placeholder={'Home Information'} displayName={'Home Info'} onChangeHandle={onChangeHandle} />
+            </div>
+
         </div>
     );
 }

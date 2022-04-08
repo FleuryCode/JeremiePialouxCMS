@@ -1,9 +1,24 @@
 import React from "react";
+import './textEditModule.styles.scss';
 import CustomButton from "../customButton/customButton.component";
 import CustomTextBox from "../customTextBox/customTextBox.component";
-import './textEditModule.styles.scss';
+// Redux
+import { setTextData } from "../../redux/text/text.actions";
+import { connect } from "react-redux";
+// Firebase
+import { db } from "../../firebase/firebase.utils";
+import { doc, updateDoc } from "firebase/firestore";
 
-const TextEditModule = ({ id, name, value, placeholder, displayName, onChangeHandle }) => {
+const TextEditModule = ({ id, name, value, placeholder, displayName, onChangeHandle, setTextData, textData }) => {
+    const handleUpdateClick = async () => {
+        const textRef = doc(db, 'Text', 'textData');
+        await updateDoc(textRef, {
+            [name]: value
+        });
+        textData[name] = value;
+        setTextData(textData);
+        
+    };
     return (
         <div className="textEditModuleContainer container-fluid">
             <div className="row">
@@ -14,7 +29,7 @@ const TextEditModule = ({ id, name, value, placeholder, displayName, onChangeHan
                     <CustomTextBox className="infoTextBox" id={id} name={name} value={value} placeholder={placeholder} onChange={onChangeHandle} />
                 </div>
                 <div className="col-5">
-                    <CustomButton text={`Update ${displayName}`} />
+                    <CustomButton handleClick={handleUpdateClick} text={`Update ${displayName}`} />
                 </div>
             </div>
 
@@ -24,4 +39,12 @@ const TextEditModule = ({ id, name, value, placeholder, displayName, onChangeHan
     );
 }
 
-export default TextEditModule;
+const mapStateToProps = (state) => ({
+    textData: state.text.textData
+});
+
+const mapDispatchToProps = (dispatch) => ({
+    setTextData: textInfo => dispatch(setTextData(textInfo))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(TextEditModule);

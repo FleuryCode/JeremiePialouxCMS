@@ -22,6 +22,7 @@ export const SortableGallery = SortableContainer(({ items }) => (
 ));
 
 const HomeSection = ({ data, addedImages, isDownloading, setPortfolioData }) => {
+
     const [items, setItems] = useState({});
     const [changed, setChanged] = useState(false);
     // Add Save Changes for Spinner
