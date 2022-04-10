@@ -33,7 +33,7 @@ const AddImageButton = ({ portfolioData, addedImages, setAddedImages }) => {
                 // Upload to Storage
                 await uploadBytes(storageRef, fileArray[i], metadata)
                     .then(async (snapshot) => {
-                        idVariable++;
+                        idVariable = idVariable + 1;
                         
                         console.log('Storage Done')
                         await setDoc(doc(db, 'Portfolio', `${fileArray[i].name}`), {
