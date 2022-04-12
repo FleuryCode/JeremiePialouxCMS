@@ -50,7 +50,9 @@ const AddImageButton = ({ portfolioData, addedImages, setAddedImages }) => {
                             width: 1,
                             realHeight: '',
                             realWidth: '',
-                            src: ''
+                            src: '',
+                            frDescription: '',
+                            frTechnique: ''
                         });
                     
 
