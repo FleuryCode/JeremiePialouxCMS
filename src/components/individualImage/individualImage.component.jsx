@@ -4,6 +4,7 @@ import CustomInput from "../customInput/customInput.component";
 import CustomTextBox from "../customTextBox/customTextBox.component";
 import CustomButton from '../customButton/customButton.component'
 import { ReactComponent as DeleteIcon } from '../../assets/deleteIcon.svg';
+import Switch from "react-switch";
 // Firebase
 import { doc, updateDoc } from "firebase/firestore";
 import { deleteObject, getDownloadURL, ref } from "firebase/storage";
@@ -27,6 +28,12 @@ const IndividualImage = ({ data, index, setPortfolioData, deleteClick, isDeletin
     const [addingImages, setAddingImages] = useState(false);
     const [addedUrls, setAddedUrls] = useState([]);
     const [indexHover, setIndexHover] = useState(null);
+    const [enDescription, setEnDescription] = useState(pickedImage.enDescription);
+    const [enTechnique, setEnTechnique] = useState(pickedImage.enTechnique);
+
+    const [language, setLanguage] = useState('FR');
+
+
 
     const downloadAdditionalImages = async () => {
         setAddingImages(true);
@@ -51,8 +58,11 @@ const IndividualImage = ({ data, index, setPortfolioData, deleteClick, isDeletin
         setHeight(pickedImage.realHeight);
         setWidth(pickedImage.realWidth);
         setTechnique(pickedImage.technique);
+        setEnDescription(pickedImage.enDescription);
+        setEnTechnique(pickedImage.enTechnique);
         downloadAdditionalImages();
     }, [index]);
+    // Maybe add to redux
 
     useEffect(() => {
         downloadAdditionalImages();
@@ -81,6 +91,12 @@ const IndividualImage = ({ data, index, setPortfolioData, deleteClick, isDeletin
             case 'technique':
                 setTechnique(value);
                 break;
+            case 'enTechnique':
+                setEnTechnique(value);
+                break;
+            case 'enDescription':
+                setEnDescription(value);
+                break;
             default:
                 break;
         }
@@ -97,7 +113,9 @@ const IndividualImage = ({ data, index, setPortfolioData, deleteClick, isDeletin
             realHeight: height,
             realWidth: width,
             technique: technique,
-            link: title.replace(/\.[^/.]+$/, "").toLowerCase().replace(/ /g, '')
+            link: title.replace(/\.[^/.]+$/, "").toLowerCase().replace(/ /g, ''),
+            enDescription: enDescription,
+            enTechnique: enTechnique
         });
 
         data[index].title = title;
@@ -107,6 +125,8 @@ const IndividualImage = ({ data, index, setPortfolioData, deleteClick, isDeletin
         data[index].realWidth = width;
         data[index].technique = technique;
         data[index].link = title.replace(/\.[^/.]+$/, "").toLowerCase().replace(/ /g, '');
+        data[index].enDescription = enDescription;
+        data[index].enTechnique = enTechnique;
         setPortfolioData(data);
         setUpdating(false);
     };
@@ -163,17 +183,20 @@ const IndividualImage = ({ data, index, setPortfolioData, deleteClick, isDeletin
         });
 
         deleteObject(storageRef)
-        .then(() => {
-            setPortfolioData(data);
-            setAddedImages(addedImages + 1);
-            setAddingImages(false);
-        })
-        .catch((error) => {
-            console.log(error);
-        });
+            .then(() => {
+                setPortfolioData(data);
+                setAddedImages(addedImages + 1);
+                setAddingImages(false);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
     };
 
-    // Need to add a addedImages delete function eventually too.
+    const onLangClick = (lang) => {
+        setLanguage(lang);
+    };
+
     return (
         <div className="individualImageContainer">
             <div className="heroImageContainer">
@@ -212,26 +235,44 @@ const IndividualImage = ({ data, index, setPortfolioData, deleteClick, isDeletin
                 </div>
             </div>
             <div className="individualImageInfoContainer">
+                <div className="langSwitch">
+                    <h6 onClick={() => onLangClick('FR')} className={`${(language === 'FR') ? 'activeLang' : ''} frLang`}>FR</h6>
+                    <div className="text-white">-</div>
+                    <h6 onClick={() => onLangClick('EN')} className={`${(language === 'EN') ? 'activeLang' : ''} enLang`}>EN</h6>
+                </div>
                 <h4>{title}</h4>
                 <div className="individualImageInput">
-                    <label className="inputLabel" htmlFor="title">Titre</label>
-                    <CustomInput id={'title'} type={'text'} name={'title'} value={title} onChange={onInputChange} />
-                    <label className="inputLabel" htmlFor="creationDate">Date de Creation</label>
-                    <CustomInput id={'creationDate'} type={'text'} name={'creationDate'} value={creationDate} onChange={onInputChange} placeholder={'Fevrier 2022'} />
-                    <div className="dimensionContainer">
-                        <div className="heightBox">
-                            <label className="inputLabel" htmlFor="height">Hauteur</label>
-                            <CustomInput id={'height'} type={'text'} name={'height'} value={height} onChange={onInputChange} placeholder={'100 cm'} />
-                        </div>
-                        <div className="widthBox ms-auto">
-                            <label className="inputLabel" htmlFor="height">Largeur</label>
-                            <CustomInput id={'width'} type={'text'} name={'width'} value={width} onChange={onInputChange} placeholder={'50 cm'} />
-                        </div>
-                    </div>
-                    <label className="inputLabel" htmlFor="technique">Technique</label>
-                    <CustomTextBox id={'technique'} name={'technique'} value={technique} onChange={onInputChange} placeholder={'Technique'} />
-                    <label className="inputLabel" htmlFor="description">Description</label>
-                    <CustomTextBox id={'description'} name={'description'} value={description} onChange={onInputChange} placeholder={'Description'} />
+                    {
+                        (language === 'FR') ?
+                            <div className="frSection">
+                                <label className="inputLabel" htmlFor="title">Titre</label>
+                                <CustomInput id={'title'} type={'text'} name={'title'} value={title} onChange={onInputChange} />
+                                <label className="inputLabel" htmlFor="creationDate">Date de Creation</label>
+                                <CustomInput id={'creationDate'} type={'text'} name={'creationDate'} value={creationDate} onChange={onInputChange} placeholder={'Fevrier 2022'} />
+                                <div className="dimensionContainer">
+                                    <div className="heightBox">
+                                        <label className="inputLabel" htmlFor="height">Hauteur</label>
+                                        <CustomInput id={'height'} type={'text'} name={'height'} value={height} onChange={onInputChange} placeholder={'100 cm'} />
+                                    </div>
+                                    <div className="widthBox ms-auto">
+                                        <label className="inputLabel" htmlFor="height">Largeur</label>
+                                        <CustomInput id={'width'} type={'text'} name={'width'} value={width} onChange={onInputChange} placeholder={'50 cm'} />
+                                    </div>
+                                </div>
+                                <label className="inputLabel" htmlFor="technique">Technique</label>
+                                <CustomTextBox id={'technique'} name={'technique'} value={technique} onChange={onInputChange} placeholder={'Technique'} />
+                                <label className="inputLabel" htmlFor="description">Description</label>
+                                <CustomTextBox id={'description'} name={'description'} value={description} onChange={onInputChange} placeholder={'Description'} />
+                            </div>
+                            :
+                            <div className="enSection">
+                                <label className="inputLabel" htmlFor="enTechnique">Technique</label>
+                                <CustomTextBox id={'enTechnique'} name={'enTechnique'} value={enTechnique} onChange={onInputChange} placeholder={'English Technique'} />
+                                <label className="inputLabel" htmlFor="enDescription">Description</label>
+                                <CustomTextBox id={'enDescription'} name={'enDescription'} value={enDescription} onChange={onInputChange} placeholder={'English Description'} />
+                            </div>
+
+                    }
                     <div className="dataSaveButton">
                         <div onClick={() => deleteClick(data, index)} className="deleteButtonContainer me-auto ms-5">
                             {

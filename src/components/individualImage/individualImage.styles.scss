@@ -51,6 +51,30 @@
         align-items: center;
         padding-left: 4%;
 
+        .langSwitch {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: end;
+
+            .frLang,
+            .enLang {
+                color: white;
+                margin: 0;
+                margin: 0 8px;
+                transition: 0.4s ease-in-out;
+                cursor: pointer;
+                font-size: 140%;
+                &:hover {
+                    color: orange;
+                }
+
+                &.activeLang {
+                    color: orange;
+                }
+            }
+        }
+
         h4 {
             text-align: center;
             color: white;
