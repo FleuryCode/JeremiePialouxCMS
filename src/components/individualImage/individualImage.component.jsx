@@ -219,7 +219,7 @@ const IndividualImage = ({ data, index, setPortfolioData, deleteClick, isDeletin
                                 onMouseLeave={() => setIndexHover(null)}
                             >
                                 {
-                                    (indexHover === index) ?
+                                    (indexHover === index && indexHover !== 0) ?
                                         <div onClick={() => deleteAddedImage(index)} className="deleteSpecificImageContainer">
                                             <DeleteIcon />
                                         </div>
