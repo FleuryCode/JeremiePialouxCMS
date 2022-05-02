@@ -4,7 +4,6 @@ import CustomInput from "../customInput/customInput.component";
 import CustomTextBox from "../customTextBox/customTextBox.component";
 import CustomButton from '../customButton/customButton.component'
 import { ReactComponent as DeleteIcon } from '../../assets/deleteIcon.svg';
-import Switch from "react-switch";
 // Firebase
 import { doc, updateDoc } from "firebase/firestore";
 import { deleteObject, getDownloadURL, ref } from "firebase/storage";
