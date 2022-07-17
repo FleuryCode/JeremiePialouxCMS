@@ -2,11 +2,13 @@ import { KEYS } from "../Keys";
 import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage';
+import { getAuth } from 'firebase/auth';
+
 import { initializeAppCheck, ReCaptchaV3Provider } from 'firebase/app-check';
 
 
 const firebaseConfig = {
-    apiKey: KEYS.Firebase_API,
+    apiKey: KEYS.FIREBASE_KEY,
     authDomain: "jeremiepialoux-dda69.firebaseapp.com",
     projectId: "jeremiepialoux-dda69",
     storageBucket: "jeremiepialoux-dda69.appspot.com",
@@ -16,7 +18,7 @@ const firebaseConfig = {
 };
 const firebaseApp = initializeApp(firebaseConfig);
 initializeAppCheck(firebaseApp, {
-    provider: new ReCaptchaV3Provider('6LepBs8gAAAAAMGCScPiErA75hazNb_SFSpzpW2u'),
+    provider: new ReCaptchaV3Provider('6LdX1_kgAAAAAMOOwX0Q0AaiJMdJPcXHWhn-0YgY'),
     isTokenAutoRefreshEnabled: true
 });
 
@@ -24,5 +26,6 @@ initializeAppCheck(firebaseApp, {
 
 export const db = getFirestore(firebaseApp);
 export const storage = getStorage(firebaseApp);
+export const auth = getAuth(firebaseApp);
 
 export default firebaseApp;

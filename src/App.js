@@ -15,18 +15,16 @@ import { getDownloadURL, ref } from 'firebase/storage';
 
 
 function App({ loggedIn, setPortfolioData, setImagesDownloading, addedImages, setTextData }) {
-  const [testData, setTestData] = useState(true);
 
   // Text Data
   const getTextData = async () => {
     const textDocRef = doc(db, 'Text', 'textData');
     const textDocSnap = await getDoc(textDocRef);
 
-    if(textDocSnap.exists) {
-      console.log(textDocSnap.data());
+    if (textDocSnap.exists) {
       const uploadData = textDocSnap.data();
       setTextData(uploadData);
-    }else {
+    } else {
       console.log('Data does not exist.');
     };
 
@@ -68,11 +66,9 @@ function App({ loggedIn, setPortfolioData, setImagesDownloading, addedImages, se
 
 
 
-  const devVar = true;
-
   return (
     <div className="App">
-      {devVar ? <Homepage /> : <SignIn />}
+      {loggedIn ? <Homepage /> : <SignIn />}
     </div>
   );
 }
