@@ -1,0 +1,32 @@
+
+RewriteEngine On
+RewriteCond %{SERVER_PORT} 80
+RewriteRule ^(.*)$ https://admin.kamonn.fr/$1 [R=301,L]
+
+RewriteEngine On
+RewriteCond %{HTTP_HOST} ^www.admin.kamonn.fr$ [NC]
+RewriteRule ^(.*)$ http://admin.kamonn.fr/$1 [R=301,L]
+
+
+# mod_rewrite starts here
+
+RewriteEngine on
+
+# Does not apply to existing directories, meaning that if the folder exists on the server then don't change anything and don't rn the Rule!
+
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# Check for file in directory with .html extension
+
+RewriteCond %{REQUEST_FILENAME}\.html -f
+
+# Here we actually show the page that has the .html extension
+
+RewriteRule ^(.*)$ $1.html [NC,L]
+
+RewriteEngine On
+RewriteCond %{REQUEST_URI} !^/index.html$
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_URI} !\.(css|gif|ico|jpg|js|png|swf|txt|svg|woff|ttf|eot)$
+RewriteRule . index.html [L]
