@@ -133,6 +133,7 @@ const IndividualImage = ({ data, index, setPortfolioData, deleteClick, isDeletin
         data[index].link = title.replace(/\.[^/.]+$/, "").toLowerCase().replace(/ /g, '');
         data[index].enDescription = enDescription;
         data[index].enTechnique = enTechnique;
+        data[index].enDate = enDate;
         setPortfolioData(data);
         setUpdating(false);
     };
