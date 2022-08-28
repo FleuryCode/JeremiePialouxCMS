@@ -12,4 +12,9 @@
         box-shadow: 0 4px 4px rgba(0, 0, 0, 0.4);
         border: none;
     }
+
+    &.titleText {
+        height: fit-content;
+        padding: 8px;
+    }
 }

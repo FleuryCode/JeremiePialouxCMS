@@ -29,6 +29,7 @@ const IndividualImage = ({ data, index, setPortfolioData, deleteClick, isDeletin
     const [indexHover, setIndexHover] = useState(null);
     const [enDescription, setEnDescription] = useState(pickedImage.enDescription);
     const [enTechnique, setEnTechnique] = useState(pickedImage.enTechnique);
+    const [enDate, setEnDate] = useState('');
 
     const [language, setLanguage] = useState('FR');
 
@@ -96,6 +97,9 @@ const IndividualImage = ({ data, index, setPortfolioData, deleteClick, isDeletin
             case 'enDescription':
                 setEnDescription(value);
                 break;
+            case 'enDate':
+                setEnDate(value);
+                break;
             default:
                 break;
         }
@@ -105,6 +109,8 @@ const IndividualImage = ({ data, index, setPortfolioData, deleteClick, isDeletin
     const saveButtonHandle = async () => {
         const dbRef = doc(db, 'Portfolio', `${pickedImage.imageName}`);
         setUpdating(true);
+        const linkLowerase = title.replace(/\.[^/.]+$/, "").toLowerCase().replace(/ /g, '');
+        const link = linkLowerase.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
         await updateDoc(dbRef, {
             title: title,
             description: description,
@@ -112,9 +118,10 @@ const IndividualImage = ({ data, index, setPortfolioData, deleteClick, isDeletin
             realHeight: height,
             realWidth: width,
             technique: technique,
-            link: title.replace(/\.[^/.]+$/, "").toLowerCase().replace(/ /g, ''),
+            link: link,
             enDescription: enDescription,
-            enTechnique: enTechnique
+            enTechnique: enTechnique,
+            enDate: enDate
         });
 
         data[index].title = title;
@@ -225,9 +232,6 @@ const IndividualImage = ({ data, index, setPortfolioData, deleteClick, isDeletin
                                         :
                                         <img src={image} alt="Jeremie Artist" />
                                 }
-
-
-
                             </div>
                         ))
                     }
@@ -265,6 +269,8 @@ const IndividualImage = ({ data, index, setPortfolioData, deleteClick, isDeletin
                             </div>
                             :
                             <div className="enSection">
+                                <label className="inputLabel" htmlFor="enDate">Technique</label>
+                                <CustomInput id={'enDate'} name={'enDate'} value={enDate} onChange={onInputChange} placeholder={'English Date'} />
                                 <label className="inputLabel" htmlFor="enTechnique">Technique</label>
                                 <CustomTextBox id={'enTechnique'} name={'enTechnique'} value={enTechnique} onChange={onInputChange} placeholder={'English Technique'} />
                                 <label className="inputLabel" htmlFor="enDescription">Description</label>

@@ -9,7 +9,7 @@ import { connect } from "react-redux";
 import { db } from "../../firebase/firebase.utils";
 import { doc, updateDoc } from "firebase/firestore";
 
-const TextEditModule = ({ id, name, value, placeholder, displayName, onChangeHandle, setTextData, textData }) => {
+const TextEditModule = ({ id, name, value, placeholder, displayName, onChangeHandle, setTextData, textData, specificClass }) => {
     const handleUpdateClick = async () => {
         const textRef = doc(db, 'Text', 'textData');
         await updateDoc(textRef, {
@@ -20,13 +20,13 @@ const TextEditModule = ({ id, name, value, placeholder, displayName, onChangeHan
         
     };
     return (
-        <div className="textEditModuleContainer container-fluid">
+        <div className={`textEditModuleContainer container-fluid`}>
             <div className="row">
                 <div className="col-12">
                     <label htmlFor="aboutInfo"><h5>{displayName}</h5></label>
                 </div>
                 <div className="col-12">
-                    <CustomTextBox className="infoTextBox" id={id} name={name} value={value} placeholder={placeholder} onChange={onChangeHandle} />
+                    <CustomTextBox className="infoTextBox" id={id} name={name} value={value} placeholder={placeholder} onChange={onChangeHandle} specificClass={specificClass} />
                 </div>
                 <div className="col-5">
                     <CustomButton handleClick={handleUpdateClick} text={`Update ${displayName}`} />
