@@ -269,7 +269,7 @@ const IndividualImage = ({ data, index, setPortfolioData, deleteClick, isDeletin
                             </div>
                             :
                             <div className="enSection">
-                                <label className="inputLabel" htmlFor="enDate">Technique</label>
+                                <label className="inputLabel" htmlFor="enDate">English Date</label>
                                 <CustomInput id={'enDate'} name={'enDate'} value={enDate} onChange={onInputChange} placeholder={'English Date'} />
                                 <label className="inputLabel" htmlFor="enTechnique">Technique</label>
                                 <CustomTextBox id={'enTechnique'} name={'enTechnique'} value={enTechnique} onChange={onInputChange} placeholder={'English Technique'} />
