@@ -29,7 +29,7 @@ const IndividualImage = ({ data, index, setPortfolioData, deleteClick, isDeletin
     const [indexHover, setIndexHover] = useState(null);
     const [enDescription, setEnDescription] = useState(pickedImage.enDescription);
     const [enTechnique, setEnTechnique] = useState(pickedImage.enTechnique);
-    const [enDate, setEnDate] = useState('');
+    const [enDate, setEnDate] = useState(pickedImage.enDate);
 
     const [language, setLanguage] = useState('FR');
 
@@ -60,6 +60,7 @@ const IndividualImage = ({ data, index, setPortfolioData, deleteClick, isDeletin
         setTechnique(pickedImage.technique);
         setEnDescription(pickedImage.enDescription);
         setEnTechnique(pickedImage.enTechnique);
+        setEnDate(pickedImage.enDate)
         downloadAdditionalImages();
     }, [index]);
     // Maybe add to redux
